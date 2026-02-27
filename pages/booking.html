@@ -1,0 +1,170 @@
+<!--
+CPCS403 – Advanced Web Development
+Website: Red Sea Escapes
+
+Students:
+1. Norah Mansour Alhozab – 2205688
+2. [Student Name] – [ID]
+3. [Student Name] – [ID]
+
+Page: Resort Booking
+
+Description:
+This page allows users to book resort stays. 
+Users can select dates, choose options, and simulate 
+a reservation process.
+-->
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Booking • Red Sea Escapes</title>
+<link href="../global/main.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="top-hero" style="min-height:78vh">
+<div class="bg" id="bookingHeroBg"></div>
+<div class="overlay"></div>
+<div class="navbar">
+<div class="container">
+<div class="bar">
+<a class="brand" href="../index.html">
+<i class="dot"></i>
+<span>Red Sea Escapes</span>
+</a>
+<nav class="navlinks">
+<a class="pill" data-nav="index" href="../index.html">Home</a>
+<a class="pill" data-nav="services" href="./services.html">Services</a>
+<a class="pill" data-nav="activities_booking" href="./activities_booking.html">Activities</a>
+<a class="pill" data-nav="booking" href="./booking.html?resort=shebara">Resorts</a>
+<a class="pill" href="./about.html">About</a>
+</nav>
+<a class="pill" href="../index.html#account">Account</a>
+</div>
+</div>
+</div>
+<div class="container">
+<div class="hero-content">
+<div class="hero-kicker"><span class="dot"></span> Booking</div>
+<h1 class="hero-title" id="bookingResortName">Resort</h1>
+<p class="hero-sub" id="bookingResortSub"></p>
+</div>
+</div>
+</header>
+<main class="section">
+<div class="container">
+<div class="section-head">
+<div>
+<h2>Choose a room</h2>
+<p class="lead">Tap any card to view details and book.</p>
+</div>
+</div>
+<div class="panel">
+<div class="carousel" id="resortsCarouselTwo">
+<div class="track" id="roomsRoot">
+<a class="card" href="#">
+<img alt="Room 1" src="../images/Shebara/FourBedroomBeachRoyalVilla.jpg"/>
+<div class="shade"></div>
+<div class="meta"><h3>Room</h3><p>Tap to view details</p></div>
+<div class="go"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></div>
+</a>
+<a class="card" href="#">
+<img alt="Room 2" src="../images/Shebara/OneBedroom.jpg"/>
+<div class="shade"></div>
+<div class="meta"><h3>Room</h3><p>Tap to view details</p></div>
+<div class="go"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></div>
+</a>
+<a class="card" href="#">
+<img alt="Room 3" src="../images/Shebara/ThreeBedroomBeachCrownVilla.webp"/>
+<div class="shade"></div>
+<div class="meta"><h3>Room</h3><p>Tap to view details</p></div>
+<div class="go"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></div>
+</a>
+</div>
+</div>
+<div class="carousel-controls">
+<button aria-label="Previous" class="cbtn prev" type="button">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>
+</button>
+<div class="dots"></div>
+<button aria-label="Next" class="cbtn next" type="button">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+</button>
+</div>
+</div>
+<div class="section" style="padding-bottom:0">
+<div class="panel">
+<div class="section-head">
+<div>
+<h2>Amenities</h2>
+<p class="lead">A simple list that keeps the page calm.</p>
+</div>
+</div>
+<div class="icon-row" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="icon-card"><div class="t"><b>Spa</b><span>Wellness</span></div></div>
+<div class="icon-card"><div class="t"><b>Dining</b><span>Restaurants</span></div></div>
+<div class="icon-card"><div class="t"><b>Wi-Fi</b><span>High speed</span></div></div>
+<div class="icon-card"><div class="t"><b>Concierge</b><span>24/7</span></div></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="footer">
+<div class="container">
+<div class="row">
+<div>
+<b>Red Sea Escapes</b>
+<div class="mini">© 2026</div>
+</div>
+<div class="links">
+<a href="./activities_booking.html">Activities</a>
+<a href="./services.html">Services</a>
+<a href="../index.html">Home</a>
+</div>
+</div>
+</div>
+</footer>
+<div aria-hidden="true" class="drawer" id="bookingDrawer">
+<div class="head">
+<b>Room details</b>
+<button class="close" id="drawerClose" type="button">✕</button>
+</div>
+<div class="body">
+<div class="heroimg">
+<img alt="Room" id="drawerImg" src=""/>
+</div>
+<h3 id="drawerTitle"></h3>
+<p class="sub" id="drawerSubtitle"></p>
+<div class="facts" id="drawerFacts"></div>
+<div class="formgrid">
+<label>
+          Check-in
+          <input type="date"/>
+</label>
+<label>
+          Check-out
+          <input type="date"/>
+</label>
+<label>
+          Adults
+          <select>
+<option>1</option><option selected="">2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option>
+</select>
+</label>
+<label>
+          Children
+          <select>
+<option selected="">0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+</select>
+</label>
+</div>
+<button class="bookbtn" type="button">Book</button>
+</div>
+</div>
+<script src="../scripts/main.js"></script>
+</body>
+</html>

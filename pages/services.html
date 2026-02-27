@@ -1,0 +1,182 @@
+<!--
+CPCS403 – Advanced Web Development
+Website: Red Sea Escapes
+
+Students:
+1. Norah Mansour Alhozab – 2205688
+2. [Student Name] – [ID]
+3. [Student Name] – [ID]
+
+Page: Services
+
+Description:
+This page presents all available services including resorts 
+and activities. Users can select a category and navigate 
+to the appropriate booking page.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Services • Red Sea Escapes</title>
+  <link rel="stylesheet" href="../global/main.css"/>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="navWrap">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="../index.html">
+          <span class="dot"></span>
+          <span>Red Sea Escapes</span>
+        </a>
+
+        <div class="navLinks">
+          <a href="../index.html">Home</a>
+          <a href="./about.html">About</a>
+          <a class="active" href="./services.html">Services</a>
+          <a href="./schedule.html">Schedule</a>
+          <a href="./feedback.html">Feedback</a>
+        </div>
+
+        <div class="navRight">
+          <button class="accountBtn" id="accountBtn" type="button">Account</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero heroSimple">
+    <div class="hero__bg" style="background-image:url('../images/shebara_main.jpg');"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <div class="container hero__inner center">
+        <h1 class="h1">Services</h1>
+        <p class="hero__sub">Choose a category, then book from the pages below.</p>
+
+        <div class="icon-row icon-row-3 iconbar">
+          <a class="icon-card link-card" href="./booking.html?resort=shebara">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 10.5 12 4l9 6.5"></path>
+              <path d="M5 10v10h14V10"></path>
+              <path d="M9 20v-7h6v7"></path>
+            </svg>
+            <div class="t"><b>Resorts</b><span>Book a stay</span></div>
+          </a>
+
+          <a class="icon-card link-card" href="./activities_booking.html?activity=dive">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17c3-4 6-6 9-6s6 2 9 6"></path>
+              <path d="M6 17c2-3 4-4 6-4s4 1 6 4"></path>
+              <path d="M12 3v6"></path>
+            </svg>
+            <div class="t"><b>Water activities</b><span>Dive, snorkel, sail</span></div>
+          </a>
+
+          <a class="icon-card link-card" href="./activities_booking.html?activity=hiking">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 18c4-8 14-8 18 0"></path>
+              <path d="M7 18c2-4 8-4 10 0"></path>
+              <path d="M12 6c1.5 0 3-1 3-3"></path>
+            </svg>
+            <div class="t"><b>Desert activities</b><span>Hiking, e-biking</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="section-head center-head">
+        <div>
+          <h2>Everything you can book</h2>
+          <p class="lead">Tap any item to continue.</p>
+        </div>
+      </div>
+<div class="services-grid two-two">
+
+  <!-- Row 1: Resorts -->
+  <a class="service-tile service-img" href="./booking.html?resort=shebara"
+     style="background-image:url('../images/shebara_main.jpg');">
+    <div class="shade"></div>
+    <div class="content">
+      <h3>Shebara</h3>
+      <p>Overwater villas, island calm, and sea views.</p>
+      <span class="cta">Book Shebara →</span>
+    </div>
+  </a>
+
+  <a class="service-tile service-img" href="./booking.html?resort=dunes"
+     style="background-image:url('../images/dunes_main.webp');">
+    <div class="shade"></div>
+    <div class="content">
+      <h3>Dunes</h3>
+      <p>Desert serenity, wellness, and mountain views.</p>
+      <span class="cta">Book Dunes →</span>
+    </div>
+  </a>
+
+  <!-- Row 2: Activities -->
+  <a class="service-tile service-img" href="./activities_booking.html?activity=dive"
+     style="background-image:url('../images/Activites/Dive_main.jpg');">
+    <div class="shade"></div>
+    <div class="content">
+      <h3>Water activities</h3>
+      <p>Dive, snorkeling, sailing, kayaking.</p>
+      <span class="cta">Book water activities →</span>
+    </div>
+  </a>
+
+  <a class="service-tile service-img" href="./activities_booking.html?activity=hiking"
+     style="background-image:url('../images/Activites/Hiking_main.webp');">
+    <div class="shade"></div>
+    <div class="content">
+      <h3>Desert activities</h3>
+      <p>Hiking and e-biking experiences.</p>
+      <span class="cta">Book desert activities →</span>
+    </div>
+  </a>
+
+</div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <b>Red Sea Escapes</b>
+          <div class="mini">© 2026</div>
+        </div>
+        <div class="links">
+          <a href="./services.html">Services</a>
+          <a href="./about.html">About</a>
+          <a href="../index.html">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Account Modal (shared) -->
+  <div class="modal" id="accountModal" aria-hidden="true">
+    <div class="box">
+      <h3>Account</h3>
+      <div class="row">
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+      </div>
+      <div class="actions">
+        <button class="ghost" id="accountClose" type="button">Close</button>
+        <button class="solid" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/main.js"></script>
+</body>
+</html>

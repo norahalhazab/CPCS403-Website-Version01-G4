@@ -1,0 +1,235 @@
+<!--
+CPCS403 – Advanced Web Development
+Website: Red Sea Escapes
+
+Students:
+1. Norah Mansour Alhozab – 2205688
+2. [Student Name] – [ID]
+3. [Student Name] – [ID]
+
+Page: Activities Booking
+
+Description:
+This page allows users to book specific activities 
+such as diving, snorkeling, hiking, or e-biking. 
+It includes booking details, FAQ, age restrictions, 
+and cancellation policy.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Activities Booking • Red Sea Escapes</title>
+  <link rel="stylesheet" href="../global/main.css"/>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="navWrap">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="../index.html">
+          <span class="dot"></span>
+          <span>Red Sea Escapes</span>
+        </a>
+
+        <div class="navLinks">
+          <a href="../index.html">Home</a>
+          <a href="./about.html">About</a>
+          <a href="./services.html">Services</a>
+          <a href="./schedule.html">Schedule</a>
+          <a href="./feedback.html">Feedback</a>
+        </div>
+
+        <div class="navRight">
+          <button class="accountBtn" id="accountBtn" type="button">Account</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO (changes by activity) -->
+  <header class="hero heroSimple" style="min-height:62vh" data-activity-hero>
+    <div class="hero__bg" id="activityHeroBg" style="background-image:url('../images/Activites/Dive_main.jpg');"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <div class="container hero__inner center">
+        <div class="kicker">Activity</div>
+        <h1 class="h1" id="activityTitle">Dive</h1>
+        <p class="hero__sub" id="activitySub">Choose a time, then book.</p>
+        <div class="pillRow" id="activityMeta"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+
+      <!-- Pick activity -->
+      <div class="section-head center-head" style="margin-bottom:14px">
+        <div>
+          <h2>Choose an activity</h2>
+          <p class="lead">Tap any card — the hero will update.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="tabs tabs-center">
+          <div class="tab active" data-activity-tab="water">Water activities</div>
+          <div class="tab" data-activity-tab="desert">Desert activities</div>
+        </div>
+
+        <div id="waterList" class="cardsGrid">
+          <a class="miniCard" data-activity-link="dive" href="./activities_booking.html?activity=dive">
+            <img src="../images/Activites/Dive.webp" alt="Dive"/>
+            <div><b>Dive</b><span>Water</span></div>
+          </a>
+          <a class="miniCard" data-activity-link="snorkeling" href="./activities_booking.html?activity=snorkeling">
+            <img src="../images/Activites/Snorkeling.webp" alt="Snorkeling"/>
+            <div><b>Snorkeling</b><span>Water</span></div>
+          </a>
+          <a class="miniCard" data-activity-link="sailing" href="./activities_booking.html?activity=sailing">
+            <img src="../images/Activites/Sailing.webp" alt="Sailing"/>
+            <div><b>Sailing</b><span>Water</span></div>
+          </a>
+          <a class="miniCard" data-activity-link="kayaking" href="./activities_booking.html?activity=kayaking">
+            <img src="../images/Activites/Kayaking.webp" alt="Kayaking"/>
+            <div><b>Kayaking</b><span>Water</span></div>
+          </a>
+        </div>
+
+        <div id="desertList" class="cardsGrid" style="display:none">
+          <a class="miniCard" data-activity-link="hiking" href="./activities_booking.html?activity=hiking">
+            <img src="../images/Activites/Hiking.webp" alt="Hiking"/>
+            <div><b>Hiking</b><span>Desert</span></div>
+          </a>
+          <a class="miniCard" data-activity-link="ebiking" href="./activities_booking.html?activity=ebiking">
+            <img src="../images/Activites/E-Biking.webp" alt="E-Biking"/>
+            <div><b>E-Biking</b><span>Desert</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Booking form -->
+      <div class="section" style="padding-bottom:0">
+        <div class="section-head center-head">
+          <div>
+            <h2>Book this activity</h2>
+            <p class="lead">Select date and time, then continue.</p>
+          </div>
+        </div>
+
+        <div class="panel bookingPanel">
+          <div class="formgrid formgrid-3">
+            <label>
+              Date
+              <input id="actDate" type="date" />
+            </label>
+
+            <label>
+              Participants
+              <select id="actPeople">
+                <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+              </select>
+            </label>
+
+            <label>
+              Contact email
+              <input id="actEmail" type="email" placeholder="name@email.com" />
+            </label>
+          </div>
+
+          <div class="timeRow" id="timeRow">
+            <label class="timeChip"><input type="radio" name="slot" checked value="09:00"/>09:00</label>
+            <label class="timeChip"><input type="radio" name="slot" value="11:00"/>11:00</label>
+            <label class="timeChip"><input type="radio" name="slot" value="13:00"/>13:00</label>
+            <label class="timeChip"><input type="radio" name="slot" value="15:00"/>15:00</label>
+            <label class="timeChip"><input type="radio" name="slot" value="17:00"/>17:00</label>
+          </div>
+
+          <div class="notice" id="ageNotice">Age restriction: 12+</div>
+
+          <div class="hero-actions" style="justify-content:center; margin-top:14px">
+            <button class="btn brand" type="button" id="actBookBtn">Book</button>
+            <a class="btn" href="./services.html">Back to services</a>
+          </div>
+        </div>
+      </div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="section-head center-head">
+    <div>
+      <h2>FAQ</h2>
+      <p class="lead">Important information before booking.</p>
+    </div>
+  </div>
+
+  <div class="panel faq">
+
+    <details open>
+      <summary>What is the cancellation policy?</summary>
+      <p class="lead">
+        Free cancellation up to 24 hours before the activity start time.
+        Cancellations made less than 24 hours prior may not be refunded.
+        In case of weather conditions or safety concerns, activities may be rescheduled or fully refunded.
+      </p>
+    </details>
+
+    <details>
+      <summary>Are there age restrictions?</summary>
+      <p class="lead">
+        Age requirements vary depending on the activity:
+        <br><br>
+        • Water activities: Minimum age 8 years (children under 12 must be accompanied by an adult).  
+        <br>
+        • Diving: Minimum age 12 years.  
+        <br>
+        • Desert hiking & e-biking: Minimum age 10 years.  
+        <br><br>
+        All participants must follow safety instructions provided by the guide.
+      </p>
+    </details>
+
+  </div>
+</div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <b>Red Sea Escapes</b>
+          <div class="mini">© 2026</div>
+        </div>
+        <div class="links">
+          <a href="./services.html">Services</a>
+          <a href="./feedback.html">Feedback</a>
+          <a href="../index.html">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Account Modal (shared) -->
+  <div class="modal" id="accountModal" aria-hidden="true">
+    <div class="box">
+      <h3>Account</h3>
+      <div class="row">
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+      </div>
+      <div class="actions">
+        <button class="ghost" id="accountClose" type="button">Close</button>
+        <button class="solid" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/main.js"></script>
+</body>
+</html>

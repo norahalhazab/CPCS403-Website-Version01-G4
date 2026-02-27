@@ -1,0 +1,4 @@
+/* Simple print cleanup */
+.nav, .navWrap, .footer, .btn, .tabs, .iconbar, .modal, .toast { display:none !important; }
+body { color:#000; }
+.card, .heroCard, .bookingHero { box-shadow:none !important; }
