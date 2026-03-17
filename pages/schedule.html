@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Schedule • Red Sea Escapes</title>
+  <link rel="stylesheet" href="../global/main.css"/>
+  <style>
+    /* Make the whole card clickable and maintain layout */
+    .icon-card a.full-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .icon-card img {
+      border-radius: 8px;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="navWrap">
+  <div class="container">
+    <nav class="nav">
+      <a class="brand" href="../index.html">
+        <span class="dot"></span>
+        <span>Red Sea Escapes</span>
+      </a>
+
+      <div class="navLinks">
+        <a href="../index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./services.html">Services</a>
+        <a class="active" href="./schedule.html">Schedule</a>
+        <a href="./feedback.html">Feedback</a>
+      </div>
+
+      <button class="accountBtn" id="accountBtn">Account</button>
+    </nav>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero heroSimple">
+  <div class="hero__bg" style="background-image:url('../images/hero.jpg')"></div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content">
+    <div class="container hero__inner center">
+      <h1 class="h1">Plan Your Experience</h1>
+    </div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+
+    <!-- FILTERS -->
+    <div class="panel" style="text-align:center">
+      <div class="formgrid" style="grid-template-columns:1fr 1fr 1fr">
+        <label>
+          Date
+          <input type="date" id="dateFilter"/>
+        </label>
+
+        <label>
+          Activity Type
+          <select id="typeFilter">
+            <option value="all">All</option>
+            <option value="water">Water</option>
+            <option value="desert">Desert</option>
+          </select>
+        </label>
+
+        <label>
+          Activity
+          <select id="activityFilter">
+            <option value="all">All</option>
+            <option value="dive">Dive</option>
+            <option value="snorkeling">Snorkeling</option>
+            <option value="sailing">Sailing</option>
+            <option value="kayaking">Kayaking</option>
+            <option value="hiking">Hiking</option>
+            <option value="ebiking">E-Biking</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="section">
+      <div class="panel">
+        <div id="scheduleTable" class="icon-row" style="gap:20px"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <b>Red Sea Escapes</b>
+        <div class="mini">© 2026</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const data = [
+  {name:"Dive", type:"water", age:"12+", time:"09:00", status:"Available"},
+  {name:"Snorkeling", type:"water", age:"8+", time:"11:00", status:"Limited"},
+  {name:"Sailing", type:"water", age:"10+", time:"13:00", status:"Available"},
+  {name:"Kayaking", type:"water", age:"10+", time:"15:00", status:"Full"},
+  {name:"Hiking", type:"desert", age:"12+", time:"07:00", status:"Available"},
+  {name:"E-Biking", type:"desert", age:"16+", time:"16:00", status:"Limited"}
+];
+
+const activityImages = {
+  dive: "../images/Activites/Dive_main.jpg",
+  snorkeling: "../images/Activites/Snorkeling_main.webp",
+  sailing: "../images/Activites/Sailing_main.webp",
+  kayaking: "../images/Activites/Kayaking_main.webp",
+  hiking: "../images/Activites/Hiking_main.webp",
+  ebiking: "../images/Activites/E-Biking_main.webp"
+};
+
+// normalize names to match keys
+const normalize = str => str.toLowerCase().replace(/[- ]/g,"");
+
+const table = document.getElementById("scheduleTable");
+const typeFilter = document.getElementById("typeFilter");
+const activityFilter = document.getElementById("activityFilter");
+const dateFilter = document.getElementById("dateFilter");
+
+function render(){
+  const type = typeFilter.value;
+  const act = activityFilter.value;
+
+  table.innerHTML = "";
+
+  data.forEach(item => {
+    if(type !== "all" && item.type !== type) return;
+    if(act !== "all" && normalize(item.name) !== normalize(act)) return;
+
+    const row = document.createElement("div");
+    row.className = "icon-card";
+
+    let color = "#0f172a";
+    if(item.status === "Available") color = "green";
+    if(item.status === "Limited") color = "orange";
+    if(item.status === "Full") color = "gray";
+
+    const url = `./activities_booking.html?activity=${normalize(item.name)}`;
+
+    row.innerHTML = `
+      <a href="${url}" class="full-link">
+        <img src="${activityImages[normalize(item.name)]}" alt="${item.name}" />
+        <div style="display:flex; justify-content:space-between; align-items:center">
+          <b>${item.name}</b>
+          <span style="color:${color}; font-weight:600">${item.status}</span>
+        </div>
+
+        <div class="mini" style="margin-top:6px">
+          ${item.type} • Age ${item.age}
+        </div>
+
+        <div class="mini" style="margin-top:4px">
+          Date: ${dateFilter.value} • Time: ${item.time}
+        </div>
+      </a>
+    `;
+
+    if(item.status === "Full"){
+      row.style.opacity = "0.5";
+    }
+
+    table.appendChild(row);
+  });
+}
+
+typeFilter.addEventListener("change", render);
+activityFilter.addEventListener("change", render);
+dateFilter.addEventListener("change", render);
+
+// default date
+dateFilter.value = new Date().toISOString().split("T")[0];
+
+render();
+</script>
+
+</body>
+</html>
