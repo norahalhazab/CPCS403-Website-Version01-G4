@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feedback - Red Sea Escapes</title>
+  <link rel="stylesheet" href="../global/main.css" />
+</head>
+<body>
+
+  <div class="navWrap">
+    <div class="container nav">
+      <a class="brand" href="../index.html">
+        <i class="dot"></i>
+        <span>Red Sea Escapes</span>
+      </a>
+      <nav class="navLinks">
+        <a href="../index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./services.html">Services</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./feedback.html" class="active">Feedback</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero heroSimple" style="min-height: 45vh;">
+    <div class="hero__bg" style="background-image:url('../images/Shebara/shebara_main.jpg');"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <div class="container hero__inner center">
+        <h1 class="h1">We Value Your Feedback</h1>
+        <p class="hero__sub">Help us improve your experience.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="panel">
+        <form action="../server/process_feedback.php" method="POST">
+          
+          <div class="formgrid">
+            <label>
+              Full Name:
+              <input type="text" name="user_name" required />
+            </label>
+            <label>
+              Email Address:
+              <input type="email" name="user_email" required />
+            </label>
+          </div>
+
+          <br>
+          <div class="formgrid">
+            <label>
+              Your Preference:
+              <select name="preference">
+                <option value="Family">Family Vacation</option>
+                <option value="Couples">Couples Retreat</option>
+                <option value="Solo">Solo Adventure</option>
+              </select>
+            </label>
+          </div>
+
+          <br>
+          <label><b>How would you rate our website?</b></label>
+          <div class="timeRow">
+            <label class="timeChip"><input type="radio" name="rating" value="Good" required> Good</label>
+            <label class="timeChip"><input type="radio" name="rating" value="Average"> Average</label>
+            <label class="timeChip"><input type="radio" name="rating" value="Poor"> Poor</label>
+          </div>
+
+          <br>
+          <label><b>Which services are you interested in?</b></label>
+          <div class="timeRow">
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Resorts"> Resorts</label>
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Water"> Water Activities</label>
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Desert"> Desert Activities</label>
+          </div>
+
+          <br>
+          <div class="formgrid" style="grid-template-columns: 1fr;">
+            <label>
+              Additional Comments:
+              <textarea name="comments" rows="4"></textarea>
+            </label>
+          </div>
+
+          <div class="hero-actions" style="justify-content:center; margin-top:20px;">
+            <button type="submit" class="btn brand">Submit Feedback</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <b>Red Sea Escapes</b>
+          <div class="mini">&copy; 2026</div>
+        </div>
+        <div class="links">
+          <a href="./services.html">Services</a>
+          <a href="./about.html">About</a>
+          <a href="../index.html">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../scripts/main.js"></script>
+</body>
+</html>
