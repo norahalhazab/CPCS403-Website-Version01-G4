@@ -6,11 +6,21 @@
   <title>Schedule • Red Sea Escapes</title>
   <link rel="stylesheet" href="../global/main.css"/>
   <style>
-    
-    .icon-card a.full-link { display: block; text-decoration: none; color: inherit; }
-    .icon-card img { border-radius: 8px; margin-bottom: 8px; width: 100%; height: 180px; object-fit: cover; }
-    #scheduleTable { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .status-badge { font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+    .table-container { 
+      width: 100%; 
+      overflow-x: auto; 
+      background: white; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    th { background-color: #f8fafc; color: #64748b; text-align: left; padding: 16px; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+    tr:hover { background-color: #f1f5f9; cursor: pointer; }
+    .table-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-right: 12px; }
+    .activity-cell { display: flex; align-items: center; font-weight: 600; color: #1e293b; }
+    .status-badge { font-weight: 700; text-transform: uppercase; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid; }
+    .expired { opacity: 0.5; }
   </style>
 </head>
 
@@ -27,19 +37,20 @@
           <a class="active" href="./schedule.html">Schedule</a>
           <a href="./feedback.html">Feedback</a>
         </div>
-        <button class="accountBtn" id="accountBtn" type="button">Account</button>
+        <div class="navRight">
+          <button class="accountBtn" id="accountBtn" type="button">Account</button>
+        </div>
       </nav>
     </div>
   </div>
 
   <header class="hero heroSimple">
-    <div class="hero__bg" style="background-image:url('../images/hero.jpg')"></div>
+    <div class="hero__bg" style="background-image:url('../images/Dunes/The_Oasis.webp')"></div>
     <div class="hero__overlay"></div>
     <div class="hero__content">
       <div class="container hero__inner center">
         <h1 class="h1">Explore Activities</h1>
         <p class="hero__sub">From the depths of the ocean to the heart of the desert</p>
-        <p class="hero__sub">Your next escape starts here</p>
       </div>
     </div>
   </header>
@@ -48,7 +59,7 @@
     <div class="container">
 
       <div class="panel" style="margin-bottom: 40px;">
-        <div class="formgrid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));"> 
+        <div class="formgrid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;"> 
           <label> Date <input type="date" id="dateFilter"/> </label>
           <label> Category 
             <select id="typeFilter">
@@ -68,21 +79,25 @@
               <option value="ebiking">E-Biking</option>
             </select> 
           </label>
-          <label> Preferred Time 
-            <select id="timeFilter">
-              <option value="all">Default Times</option>
-              <option value="07:00">07:00</option>
-              <option value="09:00">09:00</option>
-              <option value="11:00">11:00</option>
-              <option value="13:00">13:00</option>
-              <option value="15:00">15:00</option>
-              <option value="16:00">16:00</option>
-            </select> 
-          </label>
         </div>
       </div>
 
-      <div id="scheduleTable"></div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>Category</th>
+              <th>Age</th>
+              <th>Time Slot</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+        <div id="noResults" class="panel center" style="display:none; border:none;">No activities match these filters</div>
+      </div>
 
     </div>
   </main>
@@ -90,123 +105,90 @@
   <footer class="footer">
     <div class="container">
       <div class="row">
-        <div><b>Red Sea Escapes</b><div class="mini">© 2026</div></div>
+        <div>
+          <b>Red Sea Escapes</b>
+          <div class="mini">© 2026</div>
+        </div>
+        <div class="links">
+          <a href="./services.html">Services</a>
+          <a href="./feedback.html">Feedback</a>
+          <a href="../index.html">Home</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <div class="modal" id="accountModal" aria-hidden="true">
-    <div class="box">
-      <h3>Account</h3>
-      <div class="row">
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-      </div>
-      <div class="actions">
-        <button class="ghost" id="accountClose" type="button">Close</button>
-        <button class="solid" type="button">Continue</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="../scripts/main.js"></script>
   <script>
     (function() {
-      // 1. Data: Activity Details and Images
       const activities = [
-        { name: "Dive", type: "water", age: "12+", baseTime: "09:00" },
-        { name: "Snorkeling", type: "water", age: "8+", baseTime: "11:00" },
-        { name: "Sailing", type: "water", age: "10+", baseTime: "13:00" },
-        { name: "Kayaking", type: "water", age: "10+", baseTime: "15:00" },
-        { name: "Hiking", type: "desert", age: "12+", baseTime: "07:00" },
-        { name: "E-Biking", type: "desert", age: "16+", baseTime: "16:00" }
+        { id: "dive", name: "Dive", type: "water", age: "12+", baseTime: "09:00", img: "../images/Activites/Dive.webp" },
+        { id: "snorkeling", name: "Snorkeling", type: "water", age: "8+", baseTime: "11:00", img: "../images/Activites/Snorkeling.webp" },
+        { id: "sailing", name: "Sailing", type: "water", age: "10+", baseTime: "13:00", img: "../images/Activites/Sailing.webp" },
+        { id: "kayaking", name: "Kayaking", type: "water", age: "10+", baseTime: "15:00", img: "../images/Activites/Kayaking.webp" },
+        { id: "hiking", name: "Hiking", type: "desert", age: "12+", baseTime: "07:00", img: "../images/Activites/Hiking.webp" },
+        { id: "ebiking", name: "E-Biking", type: "desert", age: "16+", baseTime: "16:00", img: "../images/Activites/E-Biking.webp" }
       ];
 
-      const images = {
-        dive: "../images/Activites/Dive_main.jpg",
-        snorkeling: "../images/Activites/Snorkeling_main.webp",
-        sailing: "../images/Activites/Sailing_main.webp",
-        kayaking: "../images/Activites/Kayaking_main.webp",
-        hiking: "../images/Activites/Hiking_main.webp",
-        ebiking: "../images/Activites/E-Biking_main.webp"
-      };
+      const tableBody = document.getElementById("scheduleBody");
+      const noResults = document.getElementById("noResults");
+      const filters = ['dateFilter', 'typeFilter', 'activityFilter'].map(id => document.getElementById(id));
 
-      // 2. Select HTML Elements
-      const table = document.getElementById("scheduleTable");
-      const dFilter = document.getElementById("dateFilter");
-      const tFilter = document.getElementById("typeFilter");
-      const aFilter = document.getElementById("activityFilter");
-      const tmFilter = document.getElementById("timeFilter");
-
-      // 3. Logic: Calculate if activity is Available, Limited, or Full
-      function getStatus(name, date, time) {
+      function getStatus(name, date) {
         const today = new Date().toISOString().split("T")[0];
-        if (date < today) return { label: "Expired", color: "gray", disabled: true };
-
-        const seed = name + date + time;
-        let hash = 0;
-        for (let i = 0; i < seed.length; i++) hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-        const mod = Math.abs(hash) % 3;
+        if (date < today) return { label: "Expired", color: "#64748b", disabled: true };
+        
+        const hash = name.length + parseInt(date.split('-').join(''));
+        const mod = hash % 3;
         
         if (mod === 0) return { label: "Full", color: "#ef4444", disabled: true };
         if (mod === 1) return { label: "Limited", color: "#f59e0b", disabled: false };
         return { label: "Available", color: "#10b981", disabled: false };
       }
 
-      // 4. Render Function: Create and display cards
       function render() {
-        if (!table) return;
-        const selectedDate = dFilter.value;
-        table.innerHTML = ""; 
+        const [dF, tF, aF] = filters.map(f => f.value);
+        tableBody.innerHTML = "";
+        let count = 0;
 
         activities.forEach(item => {
-          const norm = item.name.toLowerCase().replace(/[- ]/g,"");
+          if (tF !== "all" && item.type !== tF) return;
+          if (aF !== "all" && item.id !== aF) return;
+
+          const status = getStatus(item.name, dF);
+          const bookingUrl = `./activities_booking.html?activity=${item.id}&date=${dF}`;
+
+          const row = document.createElement("tr");
+          if (status.disabled) row.classList.add("expired");
           
-          // Apply Filters
-          if (tFilter.value !== "all" && item.type !== tFilter.value) return;
-          if (aFilter.value !== "all" && norm !== aFilter.value) return;
+          row.onclick = () => { if(!status.disabled) window.location.href = bookingUrl; };
 
-          const activeTime = (tmFilter.value === "all") ? item.baseTime : tmFilter.value;
-          const status = getStatus(item.name, selectedDate, activeTime);
-          const bookingUrl = `./activities_booking.html?activity=${norm}&date=${selectedDate}&time=${activeTime}`;
-
-          // Create Card HTML
-          const card = document.createElement("div");
-          card.className = "icon-card";
-          if (status.disabled) card.style.opacity = "0.6";
-
-          card.innerHTML = `
-            <a href="${bookingUrl}" class="full-link">
-              <img src="${images[norm]}" alt="${item.name}" onerror="this.src='../images/hero.jpg'">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                <b style="font-size:1.1rem">${item.name}</b>
-                <span class="status-badge" style="color:${status.color}">${status.label}</span>
+          row.innerHTML = `
+            <td>
+              <div class="activity-cell">
+                <img src="${item.img}" class="table-img" onerror="this.src='../images/hero.jpg'">
+                ${item.name}
               </div>
-              <div class="mini" style="margin-top:4px; color:#64748b;">
-                ${item.type.toUpperCase()} • Age ${item.age}
-              </div>
-              <div class="mini" style="margin-top:2px; font-weight:500;">
-                Slot: ${selectedDate} at ${activeTime}
-              </div>
-            </a>
+            </td>
+            <td><span class="mini">${item.type.toUpperCase()}</span></td>
+            <td>${item.age}</td>
+            <td><b>${item.baseTime}</b><br><small>${dF}</small></td>
+            <td><span class="status-badge" style="color:${status.color}; border-color:${status.color}">${status.label}</span></td>
+            <td>
+              <button class="btn ${status.disabled ? '' : 'brand'}" style="padding: 8px 16px; font-size: 0.8rem" ${status.disabled ? 'disabled' : ''}>
+                ${status.disabled ? 'N/A' : 'Book'}
+              </button>
+            </td>
           `;
-          table.appendChild(card);
+          tableBody.appendChild(row);
+          count++;
         });
 
-        // Show message if no results
-        if (table.innerHTML === "") {
-          table.innerHTML = "<div class='panel center' style='grid-column:1/-1'>No activities match these filters </div>";
-        }
+        noResults.style.display = count === 0 ? "block" : "none";
       }
 
-      // 5. Setup: Set default date and add listeners
-      if (dFilter && !dFilter.value) dFilter.value = new Date().toISOString().split("T")[0];
-
-      [dFilter, tFilter, aFilter, tmFilter].forEach(el => {
-        if (el) el.addEventListener("change", render);
-      });
-
-      render(); // Run on page load
+      filters[0].value = new Date().toISOString().split("T")[0];
+      filters.forEach(el => el.addEventListener("change", render));
+      render();
     })();
   </script>
 </body>
