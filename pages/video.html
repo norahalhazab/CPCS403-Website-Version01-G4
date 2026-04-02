@@ -1,0 +1,94 @@
+<!--
+CPCS403 – Advanced Web Development
+Website: Red Sea Escapes
+
+Students:
+1. Norah Mansour Alhozab – 2205688
+2. Shahad Ahmed Alsamrani - 2205802 
+3. Huda Aljaili Elsawi – 2010293
+
+Page: Video Page
+
+Description:
+This page presents a promotional video showcasing the Red Sea Escapes concept.
+It highlights resorts and activities in the Red Sea region using an AI-generated video.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video - Red Sea Escapes</title>
+  <link rel="stylesheet" href="../global/main.css" />
+</head>
+<body>
+
+  <div class="navWrap">
+    <div class="container nav">
+      <a class="brand" href="../index.html">
+        <i class="dot"></i>
+        <span>Red Sea Escapes</span>
+      </a>
+      <nav class="navLinks">
+        <a href="../index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./services.html">Services</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./video.html" class="active">Video</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero heroSimple" style="min-height: 45vh;">
+    <div class="hero__bg" style="background-image:url('../images/Shebara/shebara_main.jpg');"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <div class="container hero__inner center">
+        <h1 class="h1">Explore the Red Sea</h1>
+        <p class="hero__sub">A visual journey through resorts and activities</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="panel" style="text-align:center;">
+
+        <h3></h3>
+        <p class="lead">
+          
+        </p>
+
+        <br>
+
+        <!-- Video Player -->
+        <video controls style="width:100%; max-width:800px; border-radius:12px;">
+          <source src="../videos/AI_VIDEO.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <b>Red Sea Escapes</b>
+          <div class="mini">&copy; 2026</div>
+        </div>
+        <div class="links">
+          <a href="./services.html">Services</a>
+          <a href="./about.html">About</a>
+          <a href="../index.html">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../scripts/main.js"></script>
+</body>
+</html>
