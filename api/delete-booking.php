@@ -1,37 +1,27 @@
 <?php
-/*
- * CPCS403 – Red Sea Escapes
- * File: api/delete-booking.php
- * Purpose: Admin deletes a booking row — called by fetch() — no page reload
- * Method:  POST (JSON body with id)
- * Returns: JSON {success, message}
- */
-
-header('Content-Type: application/json');
 session_start();
-require_once __DIR__ . '/../config/db.php';
+header("Content-Type: application/json");
+require_once "../config/db.php";
 
-// Block anyone who is not an admin
-if (empty($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Admin access only.']);
+if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
+    echo json_encode(["success" => false, "message" => "Admin access only."]);
     exit;
 }
 
-$body = json_decode(file_get_contents('php://input'), true);
-$id   = filter_var($body['id'] ?? 0, FILTER_VALIDATE_INT);
+$body = json_decode(file_get_contents("php://input"), true);
+$booking_id = intval($body["booking_id"] ?? 0);
 
-if (!$id) {
-    echo json_encode(['success' => false, 'message' => 'Invalid ID.']);
+if ($booking_id <= 0) {
+    echo json_encode(["success" => false, "message" => "Invalid booking ID."]);
     exit;
 }
 
-$pdo  = getDB();
-$stmt = $pdo->prepare("DELETE FROM activity_bookings WHERE id = :id");
-$stmt->execute([':id' => $id]);
+$stmt = $conn->prepare("DELETE FROM bookings WHERE booking_id = ?");
+$stmt->bind_param("i", $booking_id);
+$stmt->execute();
 
-if ($stmt->rowCount() > 0) {
-    echo json_encode(['success' => true, 'message' => 'Booking deleted.']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Booking not found.']);
-}
+echo json_encode([
+    "success" => true,
+    "message" => "Booking deleted successfully."
+]);
+?>

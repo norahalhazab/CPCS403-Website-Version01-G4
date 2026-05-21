@@ -1,59 +1,37 @@
 <?php
-/*
- * CPCS403 – Red Sea Escapes
- * File: api/submit-feedback.php
- * Purpose: Receives feedback form data via fetch() — saves to DB — returns JSON
- * Method:  POST (JSON body sent by JavaScript)
- * Returns: JSON {success, message}
- */
+session_start();
+header("Content-Type: application/json");
+require_once "../config/db.php";
 
-header('Content-Type: application/json');
-require_once __DIR__ . '/../config/db.php';
+$name = trim($_POST["user_name"] ?? "");
+$email = trim($_POST["user_email"] ?? "");
+$preference = trim($_POST["preference"] ?? "");
+$rating = trim($_POST["rating"] ?? "");
+$comments = trim($_POST["comments"] ?? "");
+$services = isset($_POST["services"]) ? implode(", ", $_POST["services"]) : "";
+$user_id = $_SESSION["user_id"] ?? null;
 
-// Only accept POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
+if ($name === ""  $email === ""  $rating === "") {
+    echo json_encode(["success" => false, "message" => "Name, email, and rating are required."]);
     exit;
 }
 
-// Read the JSON body that JavaScript sends
-$body = json_decode(file_get_contents('php://input'), true);
-
-if (!$body) {
-    echo json_encode(['success' => false, 'message' => 'Invalid data.']);
-    exit;
-}
-
-// Validate fields
-$name     = trim($body['name']     ?? '');
-$email    = trim($body['email']    ?? '');
-$rating   = trim($body['rating']   ?? '');
-$comments = trim($body['comments'] ?? '');
-
-if (!$name || !$email || !$rating) {
-    echo json_encode(['success' => false, 'message' => 'Name, email and rating are required.']);
-    exit;
-}
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid email address.']);
+    echo json_encode(["success" => false, "message" => "Invalid email address."]);
     exit;
 }
 
-// Save to database using a prepared statement (prevents SQL injection)
-$pdo  = getDB();
-$stmt = $pdo->prepare(
-    "INSERT INTO feedback (name, email, rating, comments, created_at)
-     VALUES (:name, :email, :rating, :comments, NOW())"
-);
-$stmt->execute([
-    ':name'     => htmlspecialchars($name),
-    ':email'    => $email,
-    ':rating'   => $rating,
-    ':comments' => htmlspecialchars($comments),
-]);
+$stmt = $conn->prepare("
+INSERT INTO feedback
+(user_id, user_name, user_email, preference, rating, services, comments)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+");
 
-// Return JSON success
-echo json_encode([
-    'success' => true,
-    'message' => "Thank you $name! Your feedback was submitted.",
-]);
+$stmt->bind_param("issssss", $user_id, $name, $email, $preference, $rating, $services, $comments);
+
+if ($stmt->execute()) {
+    echo json_encode(["success" => true, "message" => "Feedback submitted successfully."]);
+} else {
+    echo json_encode(["success" => false, "message" => "Feedback failed."]);
+}
+?>

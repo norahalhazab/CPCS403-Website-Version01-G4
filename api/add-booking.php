@@ -1,84 +1,114 @@
 <?php
-/*
- * CPCS403 – Red Sea Escapes
- * File: api/add-booking.php
- * Purpose: Saves an activity booking — called by fetch() — NO page reload
- * Method:  POST (JSON body)
- * Returns: JSON {success, message, booking_id}
- */
+session_start();
+header("Content-Type: application/json");
+require_once "../config/db.php";
 
-header('Content-Type: application/json');
-require_once __DIR__ . '/../config/db.php';
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "message" => "Please login first."]);
     exit;
 }
 
-// Read JSON body sent by JavaScript fetch()
-$body = json_decode(file_get_contents('php://input'), true);
-if (!$body) {
-    echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+$user_id = $_SESSION["user_id"];
+
+$activity_id = intval($_POST["activity_id"] ?? 0);
+$date = $_POST["activity_date"] ?? "";
+$slot_time = $_POST["slot_time"] ?? "";
+$participants = intval($_POST["participants"] ?? 1);
+$user_age = intval($_POST["user_age"] ?? 0);
+
+if ($activity_id <= 0  $date === ""  $slot_time === ""  $participants <= 0  $user_age <= 0) {
+    echo json_encode(["success" => false, "message" => "Please complete all fields."]);
     exit;
 }
 
-// Get and validate each field
-$activityId   = filter_var($body['activity_id']  ?? 0,  FILTER_VALIDATE_INT);
-$bookingDate  = $body['booking_date'] ?? '';
-$timeSlot     = $body['time_slot']    ?? '';
-$participants = filter_var($body['participants']  ?? 1,  FILTER_VALIDATE_INT);
-$email        = filter_var($body['email']         ?? '', FILTER_VALIDATE_EMAIL);
+$stmt = $conn->prepare("
+SELECT activity_name, min_age, price_per_person
+FROM activities
+WHERE activity_id = ? AND is_active = 1
+");
+$stmt->bind_param("i", $activity_id);
+$stmt->execute();
+$activity = $stmt->get_result()->fetch_assoc();
 
-if (!$activityId) {
-    echo json_encode(['success' => false, 'message' => 'Please select an activity.']);
-    exit;
-}
-if (!$email) {
-    echo json_encode(['success' => false, 'message' => 'Please enter a valid email.']);
-    exit;
-}
-if (!$participants || $participants < 1 || $participants > 20) {
-    echo json_encode(['success' => false, 'message' => 'Participants must be 1–20.']);
+if (!$activity) {
+    echo json_encode(["success" => false, "message" => "Activity not found."]);
     exit;
 }
 
-// Validate date is today or future
-$dateObj = DateTime::createFromFormat('Y-m-d', $bookingDate);
-if (!$dateObj || $dateObj < new DateTime('today')) {
-    echo json_encode(['success' => false, 'message' => 'Please pick a valid future date.']);
+if ($user_age < $activity["min_age"]) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Sorry, this activity requires age " . $activity["min_age"] . "+."
+    ]);
     exit;
 }
 
-// Validate time slot
-$validSlots = ['09:00', '11:00', '13:00', '15:00', '17:00'];
-if (!in_array($timeSlot, $validSlots, true)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid time slot.']);
+$stmt = $conn->prepare("
+SELECT max_people
+FROM activity_time_slots
+WHERE activity_id = ? AND slot_time = ? AND is_active = 1
+");
+$stmt->bind_param("is", $activity_id, $slot_time);
+$stmt->execute();
+$slot = $stmt->get_result()->fetch_assoc();
+
+if (!$slot) {
+    echo json_encode(["success" => false, "message" => "This time slot is not available."]);
     exit;
 }
 
-// Insert into database
-$pdo  = getDB();
-$stmt = $pdo->prepare(
-    "INSERT INTO activity_bookings
-        (activity_id, booking_date, time_slot, participants, email, status)
-     VALUES
-        (:act, :date, :slot, :ppl, :email, 'pending')"
+$stmt = $conn->prepare("
+SELECT COALESCE(SUM(participants), 0) AS booked
+FROM bookings
+WHERE activity_id = ?
+AND start_date = ?
+AND time_slot = ?
+AND booking_type = 'activity'
+AND status = 'confirmed'
+");
+$stmt->bind_param("iss", $activity_id, $date, $slot_time);
+$stmt->execute();
+$booked = (int)$stmt->get_result()->fetch_assoc()["booked"];
+
+$remaining = (int)$slot["max_people"] - $booked;
+
+if ($participants > $remaining) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Only $remaining slot(s) left for this time."
+    ]);
+    exit;
+}
+
+$total_price = $participants * $activity["price_per_person"];
+$status = "confirmed";
+
+$stmt = $conn->prepare("
+INSERT INTO bookings
+(user_id, booking_type, activity_id, start_date, end_date, time_slot, participants, user_age, total_price, status)
+VALUES (?, 'activity', ?, ?, ?, ?, ?, ?, ?, ?)
+");
+
+$stmt->bind_param(
+    "iisssiids",
+    $user_id,
+    $activity_id,
+    $date,
+    $date,
+    $slot_time,
+    $participants,
+    $user_age,
+    $total_price,
+    $status
 );
-$stmt->execute([
-    ':act'   => $activityId,
-    ':date'  => $bookingDate,
-    ':slot'  => $timeSlot,
-    ':ppl'   => $participants,
-    ':email' => $email,
-]);
 
-$bookingId = $pdo->lastInsertId();
-
-// Return success JSON to JavaScript
-echo json_encode([
-    'success'    => true,
-    'message'    => 'Booking confirmed!',
-    'booking_id' => (int) $bookingId,
-    'date'       => $bookingDate,
-    'time'       => $timeSlot,
-]);
+if ($stmt->execute()) {
+    echo json_encode([
+        "success" => true,
+        "message" => "Activity booked successfully.",
+        "booking_id" => $stmt->insert_id
+    ]);
+} else {
+    echo json_encode(["success" => false, "message" => "Booking failed."]);
+}
+?>

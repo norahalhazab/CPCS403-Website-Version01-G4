@@ -1,47 +1,53 @@
 <?php
-/*
- * CPCS403 – Red Sea Escapes
- * File: api/search.php
- * Purpose: Live search API — called by JavaScript as the user types
- * Method:  GET ?q=keyword&category=water|desert|all
- * Returns: JSON
- */
+header("Content-Type: application/json");
+require_once "../config/db.php";
 
-header('Content-Type: application/json');
-require_once __DIR__ . '/../config/db.php';
+$q = trim($_GET["q"] ?? "");
+$category = trim($_GET["category"] ?? "all");
 
-$q        = trim($_GET['q']        ?? '');
-$category = trim($_GET['category'] ?? 'all');
+$sql = "
+SELECT activity_id, activity_name, category, description, price_per_person, min_age, image_path
+FROM activities
+WHERE is_active = 1
+";
 
-// Whitelist the category value
-if (!in_array($category, ['water', 'desert', 'all'], true)) {
-    $category = 'all';
+$params = [];
+$types = "";
+
+if ($q !== "") {
+    $sql .= " AND (activity_name LIKE ? OR description LIKE ?)";
+    $like = "%" . $q . "%";
+    $params[] = $like;
+    $params[] = $like;
+    $types .= "ss";
 }
 
-$pdo = getDB();
-
-if ($category === 'all') {
-    $stmt = $pdo->prepare(
-        "SELECT id, name, category, description, price, min_age, image
-         FROM   activities
-         WHERE  name LIKE :q OR description LIKE :q
-         ORDER  BY name ASC LIMIT 10"
-    );
-    $stmt->execute([':q' => "%$q%"]);
-} else {
-    $stmt = $pdo->prepare(
-        "SELECT id, name, category, description, price, min_age, image
-         FROM   activities
-         WHERE  (name LIKE :q OR description LIKE :q) AND category = :cat
-         ORDER  BY name ASC LIMIT 10"
-    );
-    $stmt->execute([':q' => "%$q%", ':cat' => $category]);
+if ($category !== "all") {
+    $sql .= " AND category = ?";
+    $params[] = $category;
+    $types .= "s";
 }
 
-$results = $stmt->fetchAll();
+$sql .= " ORDER BY activity_name LIMIT 10";
+
+$stmt = $conn->prepare($sql);
+
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = [];
+
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+}
 
 echo json_encode([
-    'success' => true,
-    'count'   => count($results),
-    'results' => $results,
+    "success" => true,
+    "count" => count($data),
+    "results" => $data
 ]);
+?>
