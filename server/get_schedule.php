@@ -1,0 +1,89 @@
+<?php
+require_once "../config/db.php";
+
+header("Content-Type: application/json");
+
+$date = $_GET["date"] ?? date("Y-m-d");
+$type = $_GET["type"] ?? "all";
+$activity = $_GET["activity"] ?? "all";
+
+$sql = "
+SELECT 
+  a.activity_id,
+  a.activity_name,
+  a.category,
+  a.min_age,
+  a.image_path,
+  ats.slot_time,
+  ats.max_people,
+  COALESCE(SUM(b.participants), 0) AS booked_people
+FROM activity_time_slots ats
+JOIN activities a ON ats.activity_id = a.activity_id
+LEFT JOIN bookings b 
+  ON b.activity_id = ats.activity_id
+  AND b.time_slot = ats.slot_time
+  AND b.start_date = ?
+  AND b.booking_type = 'activity'
+  AND b.status = 'confirmed'
+WHERE ats.is_active = 1
+AND a.is_active = 1
+";
+
+$params = [$date];
+$types = "s";
+
+if ($type !== "all") {
+    $sql .= " AND a.category = ?";
+    $params[] = $type;
+    $types .= "s";
+}
+
+if ($activity !== "all") {
+    $sql .= " AND LOWER(REPLACE(a.activity_name, '-', '')) = ?";
+    $params[] = strtolower(str_replace("-", "", $activity));
+    $types .= "s";
+}
+
+$sql .= "
+GROUP BY ats.slot_id
+ORDER BY a.category, a.activity_name, ats.slot_time
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param($types, ...$params);
+$stmt->execute();
+
+$result = $stmt->get_result();
+$data = [];
+
+while ($row = $result->fetch_assoc()) {
+    $remaining = (int)$row["max_people"] - (int)$row["booked_people"];
+
+    if ($remaining <= 0) {
+        $status = "Full";
+        $disabled = true;
+    } elseif ($remaining <= 3) {
+        $status = "Limited";
+        $disabled = false;
+    } else {
+        $status = "Available";
+        $disabled = false;
+    }
+
+    $data[] = [
+        "activity_id" => $row["activity_id"],
+        "activity_name" => $row["activity_name"],
+        "category" => $row["category"],
+        "min_age" => $row["min_age"],
+        "image_path" => $row["image_path"],
+        "slot_time" => substr($row["slot_time"], 0, 5),
+        "max_people" => (int)$row["max_people"],
+        "booked_people" => (int)$row["booked_people"],
+        "remaining" => max(0, $remaining),
+        "status" => $status,
+        "disabled" => $disabled
+    ];
+}
+
+echo json_encode($data);
+?>

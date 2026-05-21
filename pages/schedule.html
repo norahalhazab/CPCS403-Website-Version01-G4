@@ -1,23 +1,3 @@
-
-
-<!--
-CPCS403 – Advanced Web Development
-Website: Red Sea Escapes
-
-Students:
-1. Norah Mansour Alhozab – 2205688
-2. Shahad Ahmed Alsamrani - 2205802 
-3. Huda Aljaili Elsawi – 2010293
-
-Page: Schedule Page
-
-Description:
-This page features a dynamic activity timetable for Red Sea Escapes. 
-It lets users filter excursions by date or category,
-check real time availability (Available, Limited, or Full), and book directly.
--->
-
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,190 +6,228 @@ check real time availability (Available, Limited, or Full), and book directly.
   <title>Schedule • Red Sea Escapes</title>
   <link rel="stylesheet" href="../global/main.css"/>
   <style>
-    .table-container { 
-      width: 100%; 
-      overflow-x: auto; 
-      background: white; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+    .table-container{
+      width:100%;
+      overflow-x:auto;
+      background:white;
+      border-radius:22px;
+      box-shadow:0 14px 36px rgba(2,6,23,.08);
+      border:1px solid rgba(15,23,42,.12);
     }
-    table { width: 100%; border-collapse: collapse; min-width: 800px; }
-    th { background-color: #f8fafc; color: #64748b; text-align: left; padding: 16px; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
-    td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
-    tr:hover { background-color: #f1f5f9; cursor: pointer; }
-    .table-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-right: 12px; }
-    .activity-cell { display: flex; align-items: center; font-weight: 600; color: #1e293b; }
-    .status-badge { font-weight: 700; text-transform: uppercase; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid; }
-    .expired { opacity: 0.5; }
+    table{width:100%;border-collapse:collapse;min-width:900px}
+    th{background:#f8fafc;color:#64748b;text-align:left;padding:16px;font-weight:800;border-bottom:1px solid #e2e8f0}
+    td{padding:16px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
+    tr:hover{background:#f8fafc}
+    .table-img{width:60px;height:60px;border-radius:14px;object-fit:cover;margin-right:12px}
+    .activity-cell{display:flex;align-items:center;font-weight:800;color:#1e293b}
+    .status-badge{font-weight:800;font-size:.78rem;padding:7px 10px;border-radius:999px;border:1px solid}
+    .expired{opacity:.55}
+    .available{color:#166534;border-color:#86efac;background:#dcfce7}
+    .limited{color:#92400e;border-color:#fcd34d;background:#fef3c7}
+    .full{color:#991b1b;border-color:#fecaca;background:#fee2e2}
   </style>
 </head>
 
 <body>
 
-  <div class="navWrap">
-    <div class="container">
-      <nav class="nav">
-        <a class="brand" href="../index.html"><span class="dot"></span><span>Red Sea Escapes</span></a>
-        <div class="navLinks">
-          <a href="../index.html">Home</a>
-          <a href="./about.html">About</a>
-          <a href="./services.html">Services</a>
-          <a class="active" href="./schedule.html">Schedule</a>
-          <a href="./feedback.html">Feedback</a>
-        </div>
-        <div class="navRight">
-          <button class="accountBtn" id="accountBtn" type="button">Account</button>
-        </div>
-      </nav>
+<div class="navWrap">
+  <div class="container">
+    <nav class="nav">
+      <a class="brand" href="../index.html"><span class="dot"></span><span>Red Sea Escapes</span></a>
+      <div class="navLinks">
+        <a href="../index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./services.html">Services</a>
+        <a class="active" href="./schedule.html">Schedule</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="../profile.php">Profile</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<header class="hero heroSimple">
+  <div class="hero__bg" style="background-image:url('../images/Dunes/The_Oasis.webp')"></div>
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="container hero__inner center">
+      <h1 class="h1">Explore Activities</h1>
+      <p class="hero__sub">Check real-time availability before booking.</p>
     </div>
   </div>
+</header>
 
-  <header class="hero heroSimple">
-    <div class="hero__bg" style="background-image:url('../images/Dunes/The_Oasis.webp')"></div>
-    <div class="hero__overlay"></div>
-    <div class="hero__content">
-      <div class="container hero__inner center">
-        <h1 class="h1">Explore Activities</h1>
-        <p class="hero__sub">From the depths of the ocean to the heart of the desert</p>
+<main class="section">
+  <div class="container">
+
+    <div class="panel" style="margin-bottom:40px;">
+      <div class="formgrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;">
+        <label>
+          Date
+          <input type="date" id="dateFilter">
+        </label>
+
+        <label>
+          Category
+          <select id="typeFilter">
+            <option value="all">All Types</option>
+            <option value="water">Water</option>
+            <option value="desert">Desert</option>
+          </select>
+        </label>
+
+        <label>
+          Activity Name
+          <select id="activityFilter">
+            <option value="all">All Activities</option>
+            <option value="dive">Dive</option>
+            <option value="snorkeling">Snorkeling</option>
+            <option value="sailing">Sailing</option>
+            <option value="kayaking">Kayaking</option>
+            <option value="hiking">Hiking</option>
+            <option value="ebiking">E-Biking</option>
+          </select>
+        </label>
       </div>
     </div>
-  </header>
 
-  <main class="section">
-    <div class="container">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Category</th>
+            <th>Age</th>
+            <th>Time</th>
+            <th>Availability</th>
+            <th>Slots Left</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody"></tbody>
+      </table>
 
-      <div class="panel" style="margin-bottom: 40px;">
-        <div class="formgrid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;"> 
-          <label> Date <input type="date" id="dateFilter"/> </label>
-          <label> Category 
-            <select id="typeFilter">
-              <option value="all">All Types</option>
-              <option value="water">Water</option>
-              <option value="desert">Desert</option>
-            </select>
-          </label>
-          <label> Activity Name 
-            <select id="activityFilter">
-              <option value="all">All Activities</option>
-              <option value="dive">Dive</option>
-              <option value="snorkeling">Snorkeling</option>
-              <option value="sailing">Sailing</option>
-              <option value="kayaking">Kayaking</option>
-              <option value="hiking">Hiking</option>
-              <option value="ebiking">E-Biking</option>
-            </select> 
-          </label>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Activity</th>
-              <th>Category</th>
-              <th>Age</th>
-              <th>Time Slot</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="scheduleBody"></tbody>
-        </table>
-        <div id="noResults" class="panel center" style="display:none; border:none;">No activities match these filters</div>
-      </div>
-
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div>
-          <b>Red Sea Escapes</b>
-          <div class="mini">© 2026</div>
-        </div>
-        <div class="links">
-          <a href="./services.html">Services</a>
-          <a href="./feedback.html">Feedback</a>
-          <a href="../index.html">Home</a>
-        </div>
+      <div id="noResults" class="panel center" style="display:none;border:none;">
+        No activities match these filters.
       </div>
     </div>
-  </footer>
 
-  <script>
-    (function() {
-      const activities = [
-        { id: "dive", name: "Dive", type: "water", age: "12+", baseTime: "09:00", img: "../images/Activites/Dive.webp" },
-        { id: "snorkeling", name: "Snorkeling", type: "water", age: "8+", baseTime: "11:00", img: "../images/Activites/Snorkeling.webp" },
-        { id: "sailing", name: "Sailing", type: "water", age: "10+", baseTime: "13:00", img: "../images/Activites/Sailing.webp" },
-        { id: "kayaking", name: "Kayaking", type: "water", age: "10+", baseTime: "15:00", img: "../images/Activites/Kayaking.webp" },
-        { id: "hiking", name: "Hiking", type: "desert", age: "12+", baseTime: "07:00", img: "../images/Activites/Hiking.webp" },
-        { id: "ebiking", name: "E-Biking", type: "desert", age: "16+", baseTime: "16:00", img: "../images/Activites/E-Biking.webp" }
-      ];
+  </div>
+</main>
 
-      const tableBody = document.getElementById("scheduleBody");
-      const noResults = document.getElementById("noResults");
-      const filters = ['dateFilter', 'typeFilter', 'activityFilter'].map(id => document.getElementById(id));
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <b>Red Sea Escapes</b>
+        <div class="mini">© 2026</div>
+      </div>
+      <div class="links">
+        <a href="./services.html">Services</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="../index.html">Home</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-      function getStatus(name, date) {
-        const today = new Date().toISOString().split("T")[0];
-        if (date < today) return { label: "Expired", color: "#64748b", disabled: true };
-        
-        const hash = name.length + parseInt(date.split('-').join(''));
-        const mod = hash % 3;
-        
-        if (mod === 0) return { label: "Full", color: "#ef4444", disabled: true };
-        if (mod === 1) return { label: "Limited", color: "#f59e0b", disabled: false };
-        return { label: "Available", color: "#10b981", disabled: false };
+<script>
+const tableBody = document.getElementById("scheduleBody");
+const noResults = document.getElementById("noResults");
+
+const dateFilter = document.getElementById("dateFilter");
+const typeFilter = document.getElementById("typeFilter");
+const activityFilter = document.getElementById("activityFilter");
+
+dateFilter.value = new Date().toISOString().split("T")[0];
+
+function statusClass(status){
+  if(status === "Full") return "full";
+  if(status === "Limited") return "limited";
+  return "available";
+}
+
+function activityKey(name){
+  return name.toLowerCase().replace("-", "").replace(/\s+/g, "");
+}
+
+function loadSchedule(){
+  const date = dateFilter.value;
+  const type = typeFilter.value;
+  const activity = activityFilter.value;
+
+  tableBody.innerHTML = `
+    <tr>
+      <td colspan="7" style="text-align:center;padding:24px;">Loading schedule...</td>
+    </tr>
+  `;
+
+  fetch(`../server/get_schedule.php?date=${date}&type=${type}&activity=${activity}`)
+    .then(res => res.json())
+    .then(data => {
+      tableBody.innerHTML = "";
+
+      if(!data.length){
+        noResults.style.display = "block";
+        return;
       }
 
-      function render() {
-        const [dF, tF, aF] = filters.map(f => f.value);
-        tableBody.innerHTML = "";
-        let count = 0;
+      noResults.style.display = "none";
 
-        activities.forEach(item => {
-          if (tF !== "all" && item.type !== tF) return;
-          if (aF !== "all" && item.id !== aF) return;
+      data.forEach(item => {
+        const row = document.createElement("tr");
 
-          const status = getStatus(item.name, dF);
-          const bookingUrl = `./activities_booking.html?activity=${item.id}&date=${dF}`;
+        const key = activityKey(item.activity_name);
+        const bookingUrl = `./activities_booking.html?activity=${key}&date=${date}`;
 
-          const row = document.createElement("tr");
-          if (status.disabled) row.classList.add("expired");
-          
-          row.onclick = () => { if(!status.disabled) window.location.href = bookingUrl; };
+        row.innerHTML = `
+          <td>
+            <div class="activity-cell">
+              <img src="../${item.image_path}" class="table-img" onerror="this.src='../images/hero.jpg'">
+              ${item.activity_name}
+            </div>
+          </td>
+          <td><span class="mini">${item.category.toUpperCase()}</span></td>
+          <td>${item.min_age}+</td>
+          <td><b>${item.slot_time}</b><br><small>${date}</small></td>
+          <td>
+            <span class="status-badge ${statusClass(item.status)}">
+              ${item.status}
+            </span>
+          </td>
+          <td>
+            <b>${item.remaining}</b> / ${item.max_people}
+            <br><small>${item.booked_people} booked</small>
+          </td>
+          <td>
+            <a class="btn ${item.disabled ? '' : 'brand'}"
+               style="padding:8px 16px;font-size:.8rem;pointer-events:${item.disabled ? 'none' : 'auto'};opacity:${item.disabled ? '.5' : '1'}"
+               href="${bookingUrl}">
+               ${item.disabled ? 'Full' : 'Book'}
+            </a>
+          </td>
+        `;
 
-          row.innerHTML = `
-            <td>
-              <div class="activity-cell">
-                <img src="${item.img}" class="table-img" onerror="this.src='../images/hero.jpg'">
-                ${item.name}
-              </div>
-            </td>
-            <td><span class="mini">${item.type.toUpperCase()}</span></td>
-            <td>${item.age}</td>
-            <td><b>${item.baseTime}</b><br><small>${dF}</small></td>
-            <td><span class="status-badge" style="color:${status.color}; border-color:${status.color}">${status.label}</span></td>
-            <td>
-              <button class="btn ${status.disabled ? '' : 'brand'}" style="padding: 8px 16px; font-size: 0.8rem" ${status.disabled ? 'disabled' : ''}>
-                ${status.disabled ? 'N/A' : 'Book'}
-              </button>
-            </td>
-          `;
-          tableBody.appendChild(row);
-          count++;
-        });
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(() => {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center;color:#991b1b;padding:24px;">
+            Could not load schedule from database.
+          </td>
+        </tr>
+      `;
+    });
+}
 
-        noResults.style.display = count === 0 ? "block" : "none";
-      }
+dateFilter.addEventListener("change", loadSchedule);
+typeFilter.addEventListener("change", loadSchedule);
+activityFilter.addEventListener("change", loadSchedule);
 
-      filters[0].value = new Date().toISOString().split("T")[0];
-      filters.forEach(el => el.addEventListener("change", render));
-      render();
-    })();
-  </script>
+loadSchedule();
+</script>
+
 </body>
 </html>
