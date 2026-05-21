@@ -1,20 +1,3 @@
-<!--
-CPCS403 – Advanced Web Development
-Website: Red Sea Escapes
-
-Students:
-1. Norah Mansour Alhozab – 2205688
-2. Shahad Ahmed Alsamrani - 2205802 
-3. Huda Aljaili Elsawi – 2010293
-
-Page: Activities Booking
-
-Description:
-This page allows users to book specific activities 
-such as diving, snorkeling, hiking, or e-biking. 
-It includes booking details, FAQ, age restrictions, 
-and cancellation policy.
--->
 
 <!doctype html>
 <html lang="en">
@@ -26,210 +9,231 @@ and cancellation policy.
 </head>
 
 <body>
-  <!-- NAV -->
-  <div class="navWrap">
-    <div class="container">
-      <nav class="nav">
-        <a class="brand" href="../index.html">
-          <span class="dot"></span>
-          <span>Red Sea Escapes</span>
-        </a>
 
-        <div class="navLinks">
-          <a href="../index.html">Home</a>
-          <a href="./about.html">About</a>
-          <a href="./services.html">Services</a>
-          <a href="./schedule.html">Schedule</a>
-          <a href="./feedback.html">Feedback</a>
-        </div>
+<div class="navWrap">
+  <div class="container">
+    <nav class="nav">
+      <a class="brand" href="../index.html">
+        <span class="dot"></span>
+        <span>Red Sea Escapes</span>
+      </a>
 
-        <div class="navRight">
-          <button class="accountBtn" id="accountBtn" type="button">Account</button>
-        </div>
-      </nav>
-    </div>
-  </div>
-
-  <!-- HERO (changes by activity) -->
-  <header class="hero heroSimple" style="min-height:62vh" data-activity-hero>
-    <div class="hero__bg" id="activityHeroBg" style="background-image:url('../images/Activites/Dive_main.jpg');"></div>
-    <div class="hero__overlay"></div>
-    <div class="hero__content">
-      <div class="container hero__inner center">
-        <div class="kicker">Activity</div>
-        <h1 class="h1" id="activityTitle">Dive</h1>
-        <p class="hero__sub" id="activitySub">Choose a time, then book.</p>
-        <div class="pillRow" id="activityMeta"></div>
+      <div class="navLinks">
+        <a href="../index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./services.html">Services</a>
+        <a href="./schedule.html">Schedule</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="../profile.php">Profile</a>
       </div>
-    </div>
-  </header>
-
-  <main class="section">
-    <div class="container">
-
-      <!-- Pick activity -->
-      <div class="section-head center-head" style="margin-bottom:14px">
-        <div>
-          <h2>Choose an activity</h2>
-          <p class="lead">Tap any card — the hero will update.</p>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="tabs tabs-center">
-          <div class="tab active" data-activity-tab="water">Water activities</div>
-          <div class="tab" data-activity-tab="desert">Desert activities</div>
-        </div>
-
-        <div id="waterList" class="cardsGrid">
-          <a class="miniCard" data-activity-link="dive" href="./activities_booking.html?activity=dive">
-            <img src="../images/Activites/Dive.webp" alt="Dive"/>
-            <div><b>Dive</b><span>Water</span></div>
-          </a>
-          <a class="miniCard" data-activity-link="snorkeling" href="./activities_booking.html?activity=snorkeling">
-            <img src="../images/Activites/Snorkeling.webp" alt="Snorkeling"/>
-            <div><b>Snorkeling</b><span>Water</span></div>
-          </a>
-          <a class="miniCard" data-activity-link="sailing" href="./activities_booking.html?activity=sailing">
-            <img src="../images/Activites/Sailing.webp" alt="Sailing"/>
-            <div><b>Sailing</b><span>Water</span></div>
-          </a>
-          <a class="miniCard" data-activity-link="kayaking" href="./activities_booking.html?activity=kayaking">
-            <img src="../images/Activites/Kayaking.webp" alt="Kayaking"/>
-            <div><b>Kayaking</b><span>Water</span></div>
-          </a>
-        </div>
-
-        <div id="desertList" class="cardsGrid" style="display:none">
-          <a class="miniCard" data-activity-link="hiking" href="./activities_booking.html?activity=hiking">
-            <img src="../images/Activites/Hiking.webp" alt="Hiking"/>
-            <div><b>Hiking</b><span>Desert</span></div>
-          </a>
-          <a class="miniCard" data-activity-link="ebiking" href="./activities_booking.html?activity=ebiking">
-            <img src="../images/Activites/E-Biking.webp" alt="E-Biking"/>
-            <div><b>E-Biking</b><span>Desert</span></div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Booking form -->
-      <div class="section" style="padding-bottom:0">
-        <div class="section-head center-head">
-          <div>
-            <h2>Book this activity</h2>
-            <p class="lead">Select date and time, then continue.</p>
-          </div>
-        </div>
-
-        <div class="panel bookingPanel">
-          <div class="formgrid formgrid-3">
-            <label>
-              Date
-              <input id="actDate" type="date" />
-            </label>
-
-            <label>
-              Participants
-              <select id="actPeople">
-                <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-              </select>
-            </label>
-
-            <label>
-              Contact email
-              <input id="actEmail" type="email" placeholder="name@email.com" />
-            </label>
-          </div>
-
-          <div class="timeRow" id="timeRow">
-            <label class="timeChip"><input type="radio" name="slot" checked value="09:00"/>09:00</label>
-            <label class="timeChip"><input type="radio" name="slot" value="11:00"/>11:00</label>
-            <label class="timeChip"><input type="radio" name="slot" value="13:00"/>13:00</label>
-            <label class="timeChip"><input type="radio" name="slot" value="15:00"/>15:00</label>
-            <label class="timeChip"><input type="radio" name="slot" value="17:00"/>17:00</label>
-          </div>
-
-          <div class="notice" id="ageNotice">Age restriction: 12+</div>
-
-          <div class="hero-actions" style="justify-content:center; margin-top:14px">
-            <button class="btn brand" type="button" id="actBookBtn">Book</button>
-            <a class="btn" href="./services.html">Back to services</a>
-          </div>
-        </div>
-      </div>
-
-<!-- FAQ -->
-<div class="section">
-  <div class="section-head center-head">
-    <div>
-      <h2>FAQ</h2>
-      <p class="lead">Important information before booking.</p>
-    </div>
-  </div>
-
-  <div class="panel faq">
-
-    <details open>
-      <summary>What is the cancellation policy?</summary>
-      <p class="lead">
-        Free cancellation up to 24 hours before the activity start time.
-        Cancellations made less than 24 hours prior may not be refunded.
-        In case of weather conditions or safety concerns, activities may be rescheduled or fully refunded.
-      </p>
-    </details>
-
-    <details>
-      <summary>Are there age restrictions?</summary>
-      <p class="lead">
-        Age requirements vary depending on the activity:
-        <br><br>
-        • Water activities: Minimum age 8 years (children under 12 must be accompanied by an adult).  
-        <br>
-        • Diving: Minimum age 12 years.  
-        <br>
-        • Desert hiking & e-biking: Minimum age 10 years.  
-        <br><br>
-        All participants must follow safety instructions provided by the guide.
-      </p>
-    </details>
-
+    </nav>
   </div>
 </div>
 
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div>
-          <b>Red Sea Escapes</b>
-          <div class="mini">© 2026</div>
-        </div>
-        <div class="links">
-          <a href="./services.html">Services</a>
-          <a href="./feedback.html">Feedback</a>
-          <a href="../index.html">Home</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Account Modal (shared) -->
-  <div class="modal" id="accountModal" aria-hidden="true">
-    <div class="box">
-      <h3>Account</h3>
-      <div class="row">
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-      </div>
-      <div class="actions">
-        <button class="ghost" id="accountClose" type="button">Close</button>
-        <button class="solid" type="button">Continue</button>
-      </div>
+<header class="hero heroSimple" style="min-height:62vh">
+  <div class="hero__bg" id="activityHeroBg"></div>
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="container hero__inner center">
+      <div class="kicker">Activity</div>
+      <h1 class="h1" id="activityTitle">Activity</h1>
+      <p class="hero__sub">Choose a date, time, age, and participants.</p>
+      <div class="pillRow" id="activityMeta"></div>
     </div>
   </div>
+</header>
 
-  <script src="../scripts/main.js"></script>
+<main class="section">
+  <div class="container">
+
+    <div class="section-head center-head" style="margin-bottom:14px">
+      <div>
+        <h2>Choose an activity</h2>
+        <p class="lead">Tap any card to update the booking form.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs tabs-center">
+        <div class="tab active" data-activity-tab="water">Water activities</div>
+        <div class="tab" data-activity-tab="desert">Desert activities</div>
+      </div>
+
+      <div id="waterList" class="cardsGrid"></div>
+      <div id="desertList" class="cardsGrid" style="display:none"></div>
+    </div>
+
+    <div class="section" style="padding-bottom:0">
+      <div class="section-head center-head">
+        <div>
+          <h2>Book this activity</h2>
+          <p class="lead"></p>
+        </div>
+      </div>
+
+      <div class="panel bookingPanel">
+        <div id="activityBookingMessage"></div>
+
+        <form id="activityBookingForm">
+          <input type="hidden" name="activity_id" id="activity_id">
+
+          <div class="formgrid formgrid-3">
+            <label>Date <input name="activity_date" id="actDate" type="date" required></label>
+            <label>
+              Participants
+              <select name="participants" id="actPeople" required>
+                <option>1</option><option selected>2</option><option>3</option>
+                <option>4</option><option>5</option><option>6</option>
+              </select>
+            </label>
+            <label>Youngest participant age <input name="user_age" id="userAge" type="number" min="1" placeholder="Example: 18" required></label>
+          </div>
+
+          <div class="section-head center-head" style="margin-top:18px;margin-bottom:8px;">
+            <div>
+              <h2 style="font-size:20px;">Available Times</h2>
+              <p class="lead"></p>
+            </div>
+          </div>
+
+          <div class="timeRow" id="timeRow"></div>
+          <div class="notice" id="ageNotice">Age restriction will appear here.</div>
+
+          <div class="hero-actions" style="justify-content:center; margin-top:14px">
+            <button class="btn brand" type="submit">Book Activity</button>
+            <a class="btn" href="./services.html">Back to services</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div><b>Red Sea Escapes</b><div class="mini">© 2026</div></div>
+      <div class="links"><a href="./services.html">Services</a><a href="./feedback.html">Feedback</a><a href="../index.html">Home</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const activities = {
+  dive: { id: 1, name: "Dive", type: "water", img: "../images/Activites/Dive_main.jpg", thumb: "../images/Activites/Dive.webp", duration: "2 hours", age: 12, price: "450 SAR" },
+  snorkeling: { id: 2, name: "Snorkeling", type: "water", img: "../images/Activites/Snorkeling_main.webp", thumb: "../images/Activites/Snorkeling.webp", duration: "1.5 hours", age: 8, price: "250 SAR" },
+  sailing: { id: 3, name: "Sailing", type: "water", img: "../images/Activites/Sailing_main.webp", thumb: "../images/Activites/Sailing.webp", duration: "2 hours", age: 10, price: "300 SAR" },
+  kayaking: { id: 4, name: "Kayaking", type: "water", img: "../images/Activites/Kayaking_main.webp", thumb: "../images/Activites/Kayaking.webp", duration: "1 hour", age: 10, price: "180 SAR" },
+  hiking: { id: 5, name: "Hiking", type: "desert", img: "../images/Activites/Hiking_main.webp", thumb: "../images/Activites/Hiking.webp", duration: "2 hours", age: 12, price: "220 SAR" },
+  ebiking: { id: 6, name: "E-Biking", type: "desert", img: "../images/Activites/E-Biking_main.webp", thumb: "../images/Activites/E-Biking.webp", duration: "1.5 hours", age: 16, price: "350 SAR" }
+};
+
+const q = new URLSearchParams(location.search);
+let currentKey = (q.get("activity") || "dive").toLowerCase();
+
+function renderActivityCards() {
+  const waterList = document.getElementById("waterList");
+  const desertList = document.getElementById("desertList");
+  waterList.innerHTML = "";
+  desertList.innerHTML = "";
+
+  Object.keys(activities).forEach(key => {
+    const a = activities[key];
+    const card = document.createElement("a");
+    card.href = `activities_booking.html?activity=${key}`;
+    card.className = "miniCard";
+    if (key === currentKey) card.classList.add("active");
+    card.innerHTML = `<img src="${a.thumb}" alt="${a.name}"><div><b>${a.name}</b><span>${a.type} • Age ${a.age}+ • ${a.price}</span></div>`;
+    if (a.type === "water") waterList.appendChild(card);
+    else desertList.appendChild(card);
+  });
+}
+
+function loadTimeSlots(activityId) {
+  const timeRow = document.getElementById("timeRow");
+  timeRow.innerHTML = `<p class="lead">Loading times...</p>`;
+
+  fetch(`../server/get_activity_slots.php?activity_id=${activityId}`)
+    .then(res => res.json())
+    .then(slots => {
+      timeRow.innerHTML = "";
+      if (!slots.length) {
+        timeRow.innerHTML = `<div class="notice" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">No time slots available for this activity.</div>`;
+        return;
+      }
+
+      slots.forEach((slot, index) => {
+        const label = document.createElement("label");
+        label.className = "timeChip";
+        label.innerHTML = `<input type="radio" name="slot_time" value="${slot.time}" ${index === 0 ? "checked" : ""}>${slot.time} <small>Max ${slot.max_people}</small>`;
+        timeRow.appendChild(label);
+      });
+    })
+    .catch(() => {
+      timeRow.innerHTML = `<div class="notice" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">Could not load activity times.</div>`;
+    });
+}
+
+function setActivity(key) {
+  const a = activities[key] || activities.dive;
+  currentKey = key;
+
+  document.getElementById("activity_id").value = a.id;
+  document.getElementById("activityHeroBg").style.backgroundImage = `url('${a.img}')`;
+  document.getElementById("activityTitle").textContent = a.name;
+  document.getElementById("activityMeta").innerHTML = `<div class="pillTag">${a.type} activity</div><div class="pillTag">${a.duration}</div><div class="pillTag">Age ${a.age}+</div><div class="pillTag">${a.price} / person</div>`;
+  document.getElementById("ageNotice").textContent = `Age restriction: the youngest participant must be ${a.age}+ to book ${a.name}.`;
+
+  document.querySelector("[data-activity-tab='water']").classList.toggle("active", a.type === "water");
+  document.querySelector("[data-activity-tab='desert']").classList.toggle("active", a.type === "desert");
+  document.getElementById("waterList").style.display = a.type === "water" ? "" : "none";
+  document.getElementById("desertList").style.display = a.type === "desert" ? "" : "none";
+
+  loadTimeSlots(a.id);
+}
+
+document.querySelector("[data-activity-tab='water']").addEventListener("click", function() {
+  this.classList.add("active");
+  document.querySelector("[data-activity-tab='desert']").classList.remove("active");
+  document.getElementById("waterList").style.display = "";
+  document.getElementById("desertList").style.display = "none";
+});
+
+document.querySelector("[data-activity-tab='desert']").addEventListener("click", function() {
+  this.classList.add("active");
+  document.querySelector("[data-activity-tab='water']").classList.remove("active");
+  document.getElementById("waterList").style.display = "none";
+  document.getElementById("desertList").style.display = "";
+});
+
+document.getElementById("actDate").value = new Date().toISOString().split("T")[0];
+renderActivityCards();
+setActivity(currentKey);
+
+document.getElementById("activityBookingForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const msg = document.getElementById("activityBookingMessage");
+  const formData = new FormData(this);
+
+  fetch("../server/add_activity_booking.php", { method: "POST", body: formData })
+  .then(res => res.text())
+  .then(data => {
+    if (data.trim() === "success") {
+      msg.innerHTML = `<div class="notice">Activity booked successfully! You can view it in your profile.</div>`;
+      this.reset();
+      document.getElementById("actDate").value = new Date().toISOString().split("T")[0];
+      setActivity(currentKey);
+    } else {
+      msg.innerHTML = `<div class="notice" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">${data}</div>`;
+    }
+  })
+  .catch(() => {
+    msg.innerHTML = `<div class="notice" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">Connection error. Please try again.</div>`;
+  });
+});
+</script>
+
 </body>
 </html>

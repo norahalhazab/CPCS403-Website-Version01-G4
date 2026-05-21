@@ -1,78 +1,50 @@
 <?php
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require "../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 function sendWelcomeEmail($toEmail, $toName)
 {
+    $safeName = htmlspecialchars($toName, ENT_QUOTES, "UTF-8");
+
     $mail = new PHPMailer(true);
 
     try {
-
-        // SMTP SETTINGS
         $mail->isSMTP();
-
         $mail->Host = "smtp.gmail.com";
         $mail->SMTPAuth = true;
 
-        // YOUR GMAIL (SENDER)
-        $mail->Username = "norahalhazab@gmail.com";
-
-        // YOUR GOOGLE APP PASSWORD
-        $mail->Password = "fitx jdcq ertm fpoe";
+        // IMPORTANT:
+        // Use your Gmail address and your Google App Password.
+        // Do not use your normal Gmail password.
+        $mail->Username = "escaperedsea@gmail.com";
+        $mail->Password = "rdeq dcos eblq rxqn";
 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-
         $mail->Port = 587;
 
-        // SENDER INFO
-        $mail->setFrom(
-            "norahalhazab@gmail.com",
-            "Red Sea Escapes"
-        );
-
-        // RECEIVER = THE USER WHO REGISTERED
+        $mail->setFrom("escaperedsea@gmail.com", "Red Sea Escapes");
         $mail->addAddress($toEmail, $toName);
 
-        // EMAIL CONTENT
         $mail->isHTML(true);
-
         $mail->Subject = "Welcome to Red Sea Escapes";
 
         $mail->Body = "
-            <div style='font-family: Arial, sans-serif;'>
-
-                <h2 style='color:#0f766e;'>
-                    Welcome to Red Sea Escapes, $toName!
-                </h2>
-
-                <p>
-                    Your account has been created successfully.
-                </p>
-
-                <p>
-                    You can now explore resorts, activities, and bookings.
-                </p>
-
-                <p>
-                    Thank you for joining us.
-                </p>
-
+            <div style='font-family: Arial, sans-serif; line-height:1.6;'>
+                <h2 style='color:#0f766e;'>Welcome to Red Sea Escapes, {$safeName}!</h2>
+                <p>Your account has been created successfully.</p>
+                <p>You can now explore Red Sea resorts, activities, and bookings.</p>
+                <p>Thank you for joining us.</p>
             </div>
         ";
 
-        $mail->AltBody =
-            "Welcome to Red Sea Escapes, $toName! Your account was created successfully.";
+        $mail->AltBody = "Welcome to Red Sea Escapes, {$toName}! Your account was created successfully.";
 
-        // SEND EMAIL
         $mail->send();
-
         return true;
 
     } catch (Exception $e) {
-
         return false;
     }
 }

@@ -23,44 +23,42 @@ function setActiveNav() {
   if (match2) match2.classList.add("active");
 }
 
+function pageBasePath() {
+  // main.js is used from index.html and from pages/*.html
+  const path = location.pathname.replace(/\\/g, "/");
+  return path.includes("/pages/") ? "../" : "./";
+}
+
 function openAccountModalIfNeeded() {
-  // Shared modal (index/services/activities)
   const modal = $("#accountModal");
-  if (modal) {
-    const open = () => modal.classList.add("show");
-    const close = () => modal.classList.remove("show");
+  const accountBtn = $("#accountBtn");
 
-    const btn = $("#accountBtn");
-    if (btn) btn.addEventListener("click", (e) => {
+  const open = () => {
+    if (modal) modal.classList.add("show");
+  };
+
+  const close = () => {
+    if (modal) modal.classList.remove("show");
+  };
+
+  if (accountBtn) {
+    accountBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      open();
-    });
 
+      if (localStorage.getItem("loggedIn") === "true") {
+        window.location.href = pageBasePath() + "profile.php";
+      } else {
+        open();
+      }
+    });
+  }
+
+  if (modal) {
     const closeBtn = $("#accountClose");
     if (closeBtn) closeBtn.addEventListener("click", close);
 
     modal.addEventListener("click", (e) => {
       if (e.target === modal) close();
-    });
-
-    if (location.hash === "#account") open();
-  }
-
-  // Legacy overlay (booking.html)
-  const overlay = $("#accountOverlay");
-  if (overlay) {
-    const open = () => overlay.classList.add("show");
-    const close = () => overlay.classList.remove("show");
-
-    $("#accountBtn")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      open();
-    });
-
-    $("#accountClose")?.addEventListener("click", close);
-
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) close();
     });
 
     if (location.hash === "#account") open();
@@ -467,6 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initActivitiesBookingPage();
 });
 
+
 const registerBtn = document.getElementById("registerBtn");
 const loginBtn = document.getElementById("loginBtn");
 
@@ -479,25 +478,37 @@ const nameError = document.getElementById("nameError");
 const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
+const showLogin = document.getElementById("showLogin");
+const showRegister = document.getElementById("showRegister");
+
+function backendPath(file) {
+  return pageBasePath() + "server/" + file;
+}
+
 function showAccountMessage(message, type) {
+  if (!accountMessage) return;
   accountMessage.textContent = message;
   accountMessage.className = type;
   accountMessage.style.display = "block";
 }
 
 function setInputError(input, errorBox, message) {
+  if (!input || !errorBox) return;
   input.classList.add("input-error");
   input.classList.remove("input-success");
   errorBox.textContent = message;
 }
 
 function setInputSuccess(input, errorBox) {
+  if (!input || !errorBox) return;
   input.classList.remove("input-error");
   input.classList.add("input-success");
   errorBox.textContent = "";
 }
 
 function validateAccountEmail() {
+  if (!accountEmail) return false;
+
   const email = accountEmail.value.trim();
   const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -516,6 +527,8 @@ function validateAccountEmail() {
 }
 
 function validateAccountPassword() {
+  if (!accountPassword) return false;
+
   const password = accountPassword.value;
 
   if (password === "") {
@@ -523,8 +536,23 @@ function validateAccountPassword() {
     return false;
   }
 
-  if (password.length < 6) {
-    setInputError(accountPassword, passwordError, "Password must be at least 6 characters.");
+  if (password.length < 8) {
+    setInputError(accountPassword, passwordError, "Password must be at least 8 characters.");
+    return false;
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    setInputError(accountPassword, passwordError, "Password must include at least one uppercase letter.");
+    return false;
+  }
+
+  if (!/[a-z]/.test(password)) {
+    setInputError(accountPassword, passwordError, "Password must include at least one lowercase letter.");
+    return false;
+  }
+
+  if (!/[0-9]/.test(password)) {
+    setInputError(accountPassword, passwordError, "Password must include at least one number.");
     return false;
   }
 
@@ -533,8 +561,10 @@ function validateAccountPassword() {
 }
 
 function validateAccountName() {
+  if (!accountName) return false;
+
   const name = accountName.value.trim();
-  const namePattern = /^[A-Za-z]+$/;
+  const namePattern = /^[A-Za-z ]{2,100}$/;
 
   if (name === "") {
     setInputError(accountName, nameError, "Name is required for registration.");
@@ -542,7 +572,7 @@ function validateAccountName() {
   }
 
   if (!namePattern.test(name)) {
-    setInputError(accountName, nameError, "Use one name only, letters only.");
+    setInputError(accountName, nameError, "Use letters only. Minimum 2 characters.");
     return false;
   }
 
@@ -550,8 +580,42 @@ function validateAccountName() {
   return true;
 }
 
-function backendPath(file) {
-  return "./server/" + file;
+function updateAccountButton() {
+  const accountBtn = document.getElementById("accountBtn");
+  if (!accountBtn) return;
+
+  if (localStorage.getItem("loggedIn") === "true") {
+    accountBtn.textContent = "Profile";
+  } else {
+    accountBtn.textContent = "Account";
+  }
+}
+
+if (showLogin && showRegister) {
+  showLogin.addEventListener("click", function () {
+    showLogin.classList.add("brand");
+    showRegister.classList.remove("brand");
+
+    if (accountName) accountName.style.display = "none";
+    if (loginBtn) loginBtn.style.display = "inline-flex";
+    if (registerBtn) registerBtn.style.display = "none";
+    if (accountMessage) accountMessage.style.display = "none";
+  });
+
+  showRegister.addEventListener("click", function () {
+    showRegister.classList.add("brand");
+    showLogin.classList.remove("brand");
+
+    if (accountName) accountName.style.display = "block";
+    if (loginBtn) loginBtn.style.display = "none";
+    if (registerBtn) registerBtn.style.display = "inline-flex";
+    if (accountMessage) accountMessage.style.display = "none";
+
+    if (passwordError) {
+      passwordError.textContent = "Password must be at least 8 characters and include uppercase, lowercase, and a number.";
+      passwordError.style.color = "#64748b";
+    }
+  });
 }
 
 if (registerBtn) {
@@ -576,10 +640,28 @@ if (registerBtn) {
     })
     .then(res => res.text())
     .then(data => {
-      if (data.includes("successful")) {
-        showAccountMessage(data, "success");
+      const cleanData = data.trim();
+
+      if (cleanData === "registered_email_sent") {
+        showAccountMessage("Registration successful! Welcome email sent.", "success");
+        localStorage.setItem("loggedIn", "true");
+        updateAccountButton();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+
+      } else if (cleanData === "registered_email_failed") {
+        showAccountMessage("Registration successful, but the welcome email could not be sent.", "success");
+        localStorage.setItem("loggedIn", "true");
+        updateAccountButton();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1600);
+
       } else {
-        showAccountMessage(data, "error");
+        showAccountMessage(cleanData, "error");
       }
     })
     .catch(() => {
@@ -608,12 +690,28 @@ if (loginBtn) {
     })
     .then(res => res.text())
     .then(data => {
-      if (data === "admin") {
-        window.location.href = "./admin/dashboard.php";
-      } else if (data === "user") {
+      const cleanData = data.trim();
+
+      if (cleanData === "admin") {
+        showAccountMessage("Admin login successful!", "success");
+        localStorage.setItem("loggedIn", "true");
+        updateAccountButton();
+
+        setTimeout(() => {
+          window.location.href = pageBasePath() + "admin/dashboard.php";
+        }, 1000);
+
+      } else if (cleanData === "user") {
         showAccountMessage("Login successful!", "success");
+        localStorage.setItem("loggedIn", "true");
+        updateAccountButton();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
       } else {
-        showAccountMessage(data, "error");
+        showAccountMessage(cleanData, "error");
       }
     })
     .catch(() => {
@@ -621,35 +719,6 @@ if (loginBtn) {
     });
   });
 }
-const showLogin = document.getElementById("showLogin");
-const showRegister = document.getElementById("showRegister");
 
-if (showLogin && showRegister) {
-
-  showLogin.addEventListener("click", function () {
-
-    showLogin.classList.add("brand");
-    showRegister.classList.remove("brand");
-
-    accountName.style.display = "none";
-
-    loginBtn.style.display = "inline-flex";
-    registerBtn.style.display = "none";
-
-    accountMessage.style.display = "none";
-  });
-
-  showRegister.addEventListener("click", function () {
-
-    showRegister.classList.add("brand");
-    showLogin.classList.remove("brand");
-
-    accountName.style.display = "block";
-
-    loginBtn.style.display = "none";
-    registerBtn.style.display = "inline-flex";
-
-    accountMessage.style.display = "none";
-  });
-
-}
+document.addEventListener("DOMContentLoaded", updateAccountButton);
+updateAccountButton();
