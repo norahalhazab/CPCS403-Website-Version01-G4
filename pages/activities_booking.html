@@ -217,16 +217,20 @@ document.getElementById("activityBookingForm").addEventListener("submit", functi
   const msg = document.getElementById("activityBookingMessage");
   const formData = new FormData(this);
 
-  fetch("../server/add_activity_booking.php", { method: "POST", body: formData })
+  fetch("../api/add-booking.php", { method: "POST", body: formData })
   .then(res => res.text())
   .then(data => {
-    if (data.trim() === "success") {
+    if (data.success) {
       msg.innerHTML = `<div class="notice">Activity booked successfully! You can view it in your profile.</div>`;
       this.reset();
       document.getElementById("actDate").value = new Date().toISOString().split("T")[0];
       setActivity(currentKey);
     } else {
-      msg.innerHTML = `<div class="notice" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">${data}</div>`;
+     msg.innerHTML = `
+<div class="notice"
+     style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">
+  ${data.message}
+</div>`;
     }
   })
   .catch(() => {
