@@ -6,17 +6,13 @@ Page: Feedback Page
 
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
   <title>Feedback - Red Sea Escapes</title>
-
   <link rel="stylesheet" href="../global/main.css" />
 
   <style>
-
     .field-help {
       display: block;
       margin-top: 6px;
@@ -77,7 +73,6 @@ Page: Feedback Page
       background: #e0f2fe;
       border: 1px solid #7dd3fc;
     }
-
   </style>
 </head>
 
@@ -85,12 +80,10 @@ Page: Feedback Page
 
   <div class="navWrap">
     <div class="container nav">
-
       <a class="brand" href="../index.html">
         <i class="dot"></i>
         <span>Red Sea Escapes</span>
       </a>
-
       <nav class="navLinks">
         <a href="../index.html">Home</a>
         <a href="./about.html">About</a>
@@ -98,234 +91,117 @@ Page: Feedback Page
         <a href="./schedule.html">Schedule</a>
         <a href="./feedback.html" class="active">Feedback</a>
       </nav>
-
     </div>
   </div>
 
   <header class="hero heroSimple" style="min-height: 45vh;">
-
-    <div class="hero__bg"
-      style="background-image:url('../images/Shebara/shebara_main.jpg');">
-    </div>
-
+    <div class="hero__bg" style="background-image:url('../images/Shebara/shebara_main.jpg');"></div>
     <div class="hero__overlay"></div>
-
     <div class="hero__content">
       <div class="container hero__inner center">
         <h1 class="h1">We Value Your Feedback</h1>
-        <p class="hero__sub">
-          Help us improve your experience.
-        </p>
+        <p class="hero__sub">Help us improve your experience.</p>
       </div>
     </div>
-
   </header>
 
   <main class="section">
-
     <div class="container">
-
       <div class="panel">
 
         <div id="formMessage"></div>
 
-        <!-- AJAX FORM -->
-        <form id="feedbackForm" novalidate>
+        <form action="../server/process_feedback.php" method="POST" id="feedbackForm" novalidate>
 
           <div class="formgrid">
-
             <label>
-              Full Name:
-              <span class="required-star">*</span>
-
-              <input
-                type="text"
-                name="user_name"
-                id="userName"
-                placeholder="First name only"
-                required
-              />
-
-              <small class="field-help">
-                Required: one name only, letters only.
-                Example: Norah
-              </small>
-
+              Full Name: <span class="required-star">*</span>
+              <input type="text" name="user_name" id="userName" placeholder="First name only" required />
+              <small class="field-help">Required: one name only, letters only. Example: Norah</small>
               <span class="error-text" id="nameError"></span>
             </label>
 
             <label>
-              Email Address:
-              <span class="required-star">*</span>
-
-              <input
-                type="email"
-                name="user_email"
-                id="userEmail"
-                placeholder="example@email.com"
-                required
-              />
-
-              <small class="field-help">
-                Required: enter a valid email.
-              </small>
-
+              Email Address: <span class="required-star">*</span>
+              <input type="email" name="user_email" id="userEmail" placeholder="example@email.com" required />
+              <small class="field-help">Required: enter a valid email like name@email.com</small>
               <span class="error-text" id="emailError"></span>
             </label>
-
           </div>
 
           <br>
 
           <div class="formgrid">
-
             <label>
               Your Preference:
-
               <select name="preference" id="preference">
                 <option value="Family">Family Vacation</option>
                 <option value="Couples">Couples Retreat</option>
                 <option value="Solo">Solo Adventure</option>
               </select>
-
-              <small class="field-help">
-                Optional: choose your preferred vacation type.
-              </small>
-
+              <small class="field-help">Optional: choose the type of vacation you prefer.</small>
             </label>
-
           </div>
 
           <br>
 
-          <label>
-            <b>
-              How would you rate our website?
-              <span class="required-star">*</span>
-            </b>
-          </label>
-
+          <label><b>How would you rate our website? <span class="required-star">*</span></b></label>
           <div class="timeRow" id="ratingGroup">
-
-            <label class="timeChip">
-              <input type="radio" name="rating" value="Good" required>
-              Good
-            </label>
-
-            <label class="timeChip">
-              <input type="radio" name="rating" value="Average">
-              Average
-            </label>
-
-            <label class="timeChip">
-              <input type="radio" name="rating" value="Poor">
-              Poor
-            </label>
-
+            <label class="timeChip"><input type="radio" name="rating" value="Good" required> Good</label>
+            <label class="timeChip"><input type="radio" name="rating" value="Average"> Average</label>
+            <label class="timeChip"><input type="radio" name="rating" value="Poor"> Poor</label>
           </div>
-
           <span class="error-text" id="ratingError"></span>
 
           <br>
 
-          <label>
-            <b>Which services are you interested in?</b>
-          </label>
-
-          <small class="field-help">
-            Optional: choose one or more.
-          </small>
-
+          <label><b>Which services are you interested in?</b></label>
+          <small class="field-help">Optional: you can choose one or more.</small>
           <div class="timeRow">
-
-            <label class="timeChip">
-              <input type="checkbox" name="services[]" value="Resorts">
-              Resorts
-            </label>
-
-            <label class="timeChip">
-              <input type="checkbox" name="services[]" value="Water">
-              Water Activities
-            </label>
-
-            <label class="timeChip">
-              <input type="checkbox" name="services[]" value="Desert">
-              Desert Activities
-            </label>
-
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Resorts"> Resorts</label>
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Water"> Water Activities</label>
+            <label class="timeChip"><input type="checkbox" name="services[]" value="Desert"> Desert Activities</label>
           </div>
 
           <br>
 
           <div class="formgrid" style="grid-template-columns: 1fr;">
-
             <label>
               Additional Comments:
-
-              <textarea
-                name="comments"
-                id="comments"
-                rows="4"
-                placeholder="Optional: write extra comments">
-              </textarea>
-
-              <small class="field-help">
-                Optional field.
-              </small>
-
+              <textarea name="comments" id="comments" rows="4" placeholder="Optional: write extra comments"></textarea>
+              <small class="field-help">Optional field.</small>
             </label>
-
           </div>
 
-          <div class="hero-actions"
-               style="justify-content:center; margin-top:20px;">
-
-            <button type="submit" class="btn brand">
-              Submit Feedback
-            </button>
-
+          <div class="hero-actions" style="justify-content:center; margin-top:20px;">
+            <button type="submit" class="btn brand">Submit Feedback</button>
           </div>
 
         </form>
-
       </div>
-
     </div>
-
   </main>
 
   <footer class="footer">
-
     <div class="container">
-
       <div class="row">
-
         <div>
           <b>Red Sea Escapes</b>
           <div class="mini">&copy; 2026</div>
         </div>
-
         <div class="links">
           <a href="./services.html">Services</a>
           <a href="./about.html">About</a>
           <a href="../index.html">Home</a>
         </div>
-
       </div>
-
     </div>
-
   </footer>
 
-  <script src="../scripts/main.js"></script>
-
   <script>
-
     const feedbackForm = document.getElementById("feedbackForm");
-
     const userName = document.getElementById("userName");
     const userEmail = document.getElementById("userEmail");
-
     const formMessage = document.getElementById("formMessage");
 
     const nameError = document.getElementById("nameError");
@@ -333,174 +209,94 @@ Page: Feedback Page
     const ratingError = document.getElementById("ratingError");
 
     const namePattern = /^[A-Za-z]+$/;
-
-    const emailPattern =
-      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     function showMessage(text, type) {
-
       formMessage.textContent = text;
-
-      formMessage.className = "";
-
-      formMessage.classList.add(type);
-
+      formMessage.className = type;
     }
-
 
     function setError(input, errorElement, message) {
-
       input.classList.add("input-error");
-
       input.classList.remove("input-success");
-
       errorElement.textContent = message;
-
     }
-
 
     function setSuccess(input, errorElement) {
-
       input.classList.remove("input-error");
-
       input.classList.add("input-success");
-
       errorElement.textContent = "";
-
     }
-
 
     function clearInput(input, errorElement) {
-
       input.classList.remove("input-error");
-
       input.classList.remove("input-success");
-
       errorElement.textContent = "";
-
     }
 
-
     function validateName() {
-
       const name = userName.value.trim();
 
       if (name === "") {
-
-        setError(
-          userName,
-          nameError,
-          "Full name is required."
-        );
-
+        setError(userName, nameError, "Full name is required.");
         return false;
       }
 
       if (!namePattern.test(name)) {
-
-        setError(
-          userName,
-          nameError,
-          "Use one name only with letters only."
-        );
-
+        setError(userName, nameError, "Enter one name only using letters. No spaces, numbers, or symbols.");
         return false;
       }
 
       setSuccess(userName, nameError);
-
       return true;
     }
 
-
     function validateEmail() {
-
       const email = userEmail.value.trim();
 
       if (email === "") {
-
-        setError(
-          userEmail,
-          emailError,
-          "Email address is required."
-        );
-
+        setError(userEmail, emailError, "Email address is required.");
         return false;
       }
 
       if (!emailPattern.test(email)) {
-
-        setError(
-          userEmail,
-          emailError,
-          "Enter a valid email address."
-        );
-
+        setError(userEmail, emailError, "Enter a correct email like name@email.com.");
         return false;
       }
 
       setSuccess(userEmail, emailError);
-
       return true;
     }
 
-
     function validateRating() {
-
-      const selectedRating =
-        document.querySelector('input[name="rating"]:checked');
+      const selectedRating = document.querySelector('input[name="rating"]:checked');
 
       if (!selectedRating) {
-
-        ratingError.textContent =
-          "Please select a website rating.";
-
+        ratingError.textContent = "Please select a website rating.";
         return false;
       }
 
       ratingError.textContent = "";
-
       return true;
     }
 
-
-    userName.addEventListener("input", function () {
-
+    userName.addEventListener("input", function() {
       if (userName.value.trim() === "") {
-
         clearInput(userName, nameError);
-
       } else {
-
         validateName();
-
       }
-
     });
 
-
-    userEmail.addEventListener("input", function () {
-
+    userEmail.addEventListener("input", function() {
       if (userEmail.value.trim() === "") {
-
         clearInput(userEmail, emailError);
-
       } else {
-
         validateEmail();
-
       }
-
     });
 
-
-    /* =========================================
-       AJAX SUBMIT
-    ========================================= */
-
-    feedbackForm.addEventListener("submit", async function (event) {
-
+    feedbackForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
       const isNameValid = validateName();
@@ -508,67 +304,34 @@ Page: Feedback Page
       const isRatingValid = validateRating();
 
       if (!isNameValid || !isEmailValid || !isRatingValid) {
-
-        showMessage(
-          "Please fix the highlighted fields before submitting.",
-          "error"
-        );
-
+        showMessage("Please fix the highlighted fields before submitting.", "error");
         return;
       }
 
-      showMessage(
-        "Submitting your feedback...",
-        "loading"
-      );
+      showMessage("Submitting your feedback...", "loading");
 
       const formData = new FormData(feedbackForm);
 
-      try {
+      fetch("../server/process_feedback.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        showMessage("Thank you! Your feedback was submitted successfully.", "success");
+        feedbackForm.reset();
 
-        const response = await fetch(
-          "../api/submit-feedback.php",
-          {
-            method: "POST",
-            body: formData
-          }
-        );
-
-        const data = await response.json();
-
-        if (data.success) {
-
-          showMessage(
-            data.message,
-            "success"
-          );
-
-          feedbackForm.reset();
-
-          userName.classList.remove("input-success");
-          userEmail.classList.remove("input-success");
-
-        } else {
-
-          showMessage(
-            data.message,
-            "error"
-          );
-
-        }
-
-      } catch (error) {
-
-        showMessage(
-          "Network error. Please try again.",
-          "error"
-        );
-
-      }
-
+        userName.classList.remove("input-success");
+        userEmail.classList.remove("input-success");
+      })
+      .catch(error => {
+        showMessage("Sorry, something went wrong. Please try again.", "error");
+      });
     });
-
   </script>
 
+  <script src="../scripts/main.js"></script>
+
+  
 </body>
 </html>
