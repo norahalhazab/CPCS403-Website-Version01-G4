@@ -867,3 +867,148 @@ img{max-width:100%; display:block}
     min-height: 220px;
   }
 }
+
+.input-error {
+  border: 2px solid #dc2626 !important;
+  background-color: #fff5f5 !important;
+}
+
+.input-success {
+  border: 2px solid #16a34a !important;
+}
+
+#accountMessage.success {
+  display: block !important;
+  color: #166534;
+}
+
+#accountMessage.error {
+  display: block !important;
+  color: #991b1b;
+}
+
+.accountBox {
+  position: relative;
+  max-width: 520px;
+}
+
+.modalX {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.accountTabs {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.tabBtn.active {
+  background: #d9f7fb;
+  border-color: #6ccbd7;
+}
+
+.accountSubmit {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.input-error {
+  border: 2px solid #dc2626 !important;
+  background-color: #fff5f5 !important;
+}
+
+.input-success {
+  border: 2px solid #16a34a !important;
+}
+
+#accountMessage.success {
+  display: block;
+  color: #166534;
+  margin-bottom: 10px;
+}
+
+#accountMessage.error {
+  display: block;
+  color: #991b1b;
+  margin-bottom: 10px;
+}
+
+.accountBox {
+  position: relative;
+}
+
+.accountX {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #111827;
+}
+
+.input-error {
+  border: 2px solid #dc2626 !important;
+  background-color: #fff5f5 !important;
+}
+
+.input-success {
+  border: 2px solid #16a34a !important;
+}
+
+#accountMessage.success {
+  color: #166534;
+  font-weight: 700;
+  text-align: center;
+}
+
+#accountMessage.error {
+  color: #991b1b;
+  font-weight: 700;
+  text-align: center;
+}
+
+#showLogin,
+#showRegister {
+  display: inline-flex !important;
+  min-width: 130px;
+  justify-content: center;
+}
+
+#showLogin:not(.brand),
+#showRegister:not(.brand) {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+#showLogin.brand,
+#showRegister.brand {
+  background: #8adce6 !important;
+  color: #111827 !important;
+}
+
+#accountMessage {
+  text-align: center;
+  margin: 12px 0;
+  font-weight: 700;
+}

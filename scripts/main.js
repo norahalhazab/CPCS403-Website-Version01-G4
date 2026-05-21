@@ -466,3 +466,190 @@ document.addEventListener("DOMContentLoaded", () => {
   initResortHero();
   initActivitiesBookingPage();
 });
+
+const registerBtn = document.getElementById("registerBtn");
+const loginBtn = document.getElementById("loginBtn");
+
+const accountName = document.getElementById("accountName");
+const accountEmail = document.getElementById("accountEmail");
+const accountPassword = document.getElementById("accountPassword");
+
+const accountMessage = document.getElementById("accountMessage");
+const nameError = document.getElementById("nameError");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+
+function showAccountMessage(message, type) {
+  accountMessage.textContent = message;
+  accountMessage.className = type;
+  accountMessage.style.display = "block";
+}
+
+function setInputError(input, errorBox, message) {
+  input.classList.add("input-error");
+  input.classList.remove("input-success");
+  errorBox.textContent = message;
+}
+
+function setInputSuccess(input, errorBox) {
+  input.classList.remove("input-error");
+  input.classList.add("input-success");
+  errorBox.textContent = "";
+}
+
+function validateAccountEmail() {
+  const email = accountEmail.value.trim();
+  const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+  if (email === "") {
+    setInputError(accountEmail, emailError, "Email is required.");
+    return false;
+  }
+
+  if (!emailPattern.test(email)) {
+    setInputError(accountEmail, emailError, "Enter a valid email like name@email.com.");
+    return false;
+  }
+
+  setInputSuccess(accountEmail, emailError);
+  return true;
+}
+
+function validateAccountPassword() {
+  const password = accountPassword.value;
+
+  if (password === "") {
+    setInputError(accountPassword, passwordError, "Password is required.");
+    return false;
+  }
+
+  if (password.length < 6) {
+    setInputError(accountPassword, passwordError, "Password must be at least 6 characters.");
+    return false;
+  }
+
+  setInputSuccess(accountPassword, passwordError);
+  return true;
+}
+
+function validateAccountName() {
+  const name = accountName.value.trim();
+  const namePattern = /^[A-Za-z]+$/;
+
+  if (name === "") {
+    setInputError(accountName, nameError, "Name is required for registration.");
+    return false;
+  }
+
+  if (!namePattern.test(name)) {
+    setInputError(accountName, nameError, "Use one name only, letters only.");
+    return false;
+  }
+
+  setInputSuccess(accountName, nameError);
+  return true;
+}
+
+function backendPath(file) {
+  return "./server/" + file;
+}
+
+if (registerBtn) {
+  registerBtn.addEventListener("click", function () {
+    const validName = validateAccountName();
+    const validEmail = validateAccountEmail();
+    const validPassword = validateAccountPassword();
+
+    if (!validName || !validEmail || !validPassword) {
+      showAccountMessage("Please fix the highlighted fields.", "error");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", accountName.value.trim());
+    formData.append("email", accountEmail.value.trim());
+    formData.append("password", accountPassword.value);
+
+    fetch(backendPath("process_register.php"), {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+      if (data.includes("successful")) {
+        showAccountMessage(data, "success");
+      } else {
+        showAccountMessage(data, "error");
+      }
+    })
+    .catch(() => {
+      showAccountMessage("Connection error. Please try again.", "error");
+    });
+  });
+}
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", function () {
+    const validEmail = validateAccountEmail();
+    const validPassword = validateAccountPassword();
+
+    if (!validEmail || !validPassword) {
+      showAccountMessage("Please fix the highlighted fields.", "error");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("email", accountEmail.value.trim());
+    formData.append("password", accountPassword.value);
+
+    fetch(backendPath("process_login.php"), {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+      if (data === "admin") {
+        window.location.href = "./admin/dashboard.php";
+      } else if (data === "user") {
+        showAccountMessage("Login successful!", "success");
+      } else {
+        showAccountMessage(data, "error");
+      }
+    })
+    .catch(() => {
+      showAccountMessage("Connection error. Please try again.", "error");
+    });
+  });
+}
+const showLogin = document.getElementById("showLogin");
+const showRegister = document.getElementById("showRegister");
+
+if (showLogin && showRegister) {
+
+  showLogin.addEventListener("click", function () {
+
+    showLogin.classList.add("brand");
+    showRegister.classList.remove("brand");
+
+    accountName.style.display = "none";
+
+    loginBtn.style.display = "inline-flex";
+    registerBtn.style.display = "none";
+
+    accountMessage.style.display = "none";
+  });
+
+  showRegister.addEventListener("click", function () {
+
+    showRegister.classList.add("brand");
+    showLogin.classList.remove("brand");
+
+    accountName.style.display = "block";
+
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "inline-flex";
+
+    accountMessage.style.display = "none";
+  });
+
+}

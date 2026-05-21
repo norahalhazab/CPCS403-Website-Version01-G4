@@ -1,19 +1,7 @@
-
 <!--
 CPCS403 – Advanced Web Development
 Website: Red Sea Escapes
-
-Students:
-1. Norah Mansour Alhozab – 2205688
-2. Shahad Ahmed Alsamrani - 2205802 
-3. Huda Aljaili Elsawi – 2010293
-
 Page: Feedback Page
-
-Description:
-This page provides an interactive form for users to share their experiences. 
-It includes input fields for personal details, a dropdown for vacation preferences, 
-and a rating system with radio buttons and checkboxes to collect specific user interests.
 -->
 
 <!doctype html>
@@ -23,7 +11,71 @@ and a rating system with radio buttons and checkboxes to collect specific user i
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Feedback - Red Sea Escapes</title>
   <link rel="stylesheet" href="../global/main.css" />
+
+  <style>
+    .field-help {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .required-star {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .input-error {
+      border: 2px solid #dc2626 !important;
+      outline: none !important;
+      background-color: #fff5f5;
+    }
+
+    .input-success {
+      border: 2px solid #16a34a !important;
+      outline: none !important;
+    }
+
+    .error-text {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #dc2626;
+      min-height: 18px;
+    }
+
+    #formMessage {
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      display: none;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    #formMessage.success {
+      display: block;
+      color: #166534;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+    }
+
+    #formMessage.error {
+      display: block;
+      color: #991b1b;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+    }
+
+    #formMessage.loading {
+      display: block;
+      color: #075985;
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+    }
+  </style>
 </head>
+
 <body>
 
   <div class="navWrap">
@@ -56,41 +108,55 @@ and a rating system with radio buttons and checkboxes to collect specific user i
   <main class="section">
     <div class="container">
       <div class="panel">
-        <form action="../server/process_feedback.php" method="POST">
-          
+
+        <div id="formMessage"></div>
+
+        <form action="../server/process_feedback.php" method="POST" id="feedbackForm" novalidate>
+
           <div class="formgrid">
             <label>
-              Full Name:
-              <input type="text" name="user_name" required />
+              Full Name: <span class="required-star">*</span>
+              <input type="text" name="user_name" id="userName" placeholder="First name only" required />
+              <small class="field-help">Required: one name only, letters only. Example: Norah</small>
+              <span class="error-text" id="nameError"></span>
             </label>
+
             <label>
-              Email Address:
-              <input type="email" name="user_email" required />
+              Email Address: <span class="required-star">*</span>
+              <input type="email" name="user_email" id="userEmail" placeholder="example@email.com" required />
+              <small class="field-help">Required: enter a valid email like name@email.com</small>
+              <span class="error-text" id="emailError"></span>
             </label>
           </div>
 
           <br>
+
           <div class="formgrid">
             <label>
               Your Preference:
-              <select name="preference">
+              <select name="preference" id="preference">
                 <option value="Family">Family Vacation</option>
                 <option value="Couples">Couples Retreat</option>
                 <option value="Solo">Solo Adventure</option>
               </select>
+              <small class="field-help">Optional: choose the type of vacation you prefer.</small>
             </label>
           </div>
 
           <br>
-          <label><b>How would you rate our website?</b></label>
-          <div class="timeRow">
+
+          <label><b>How would you rate our website? <span class="required-star">*</span></b></label>
+          <div class="timeRow" id="ratingGroup">
             <label class="timeChip"><input type="radio" name="rating" value="Good" required> Good</label>
             <label class="timeChip"><input type="radio" name="rating" value="Average"> Average</label>
             <label class="timeChip"><input type="radio" name="rating" value="Poor"> Poor</label>
           </div>
+          <span class="error-text" id="ratingError"></span>
 
           <br>
+
           <label><b>Which services are you interested in?</b></label>
+          <small class="field-help">Optional: you can choose one or more.</small>
           <div class="timeRow">
             <label class="timeChip"><input type="checkbox" name="services[]" value="Resorts"> Resorts</label>
             <label class="timeChip"><input type="checkbox" name="services[]" value="Water"> Water Activities</label>
@@ -98,10 +164,12 @@ and a rating system with radio buttons and checkboxes to collect specific user i
           </div>
 
           <br>
+
           <div class="formgrid" style="grid-template-columns: 1fr;">
             <label>
               Additional Comments:
-              <textarea name="comments" rows="4"></textarea>
+              <textarea name="comments" id="comments" rows="4" placeholder="Optional: write extra comments"></textarea>
+              <small class="field-help">Optional field.</small>
             </label>
           </div>
 
@@ -129,6 +197,138 @@ and a rating system with radio buttons and checkboxes to collect specific user i
       </div>
     </div>
   </footer>
+
+  <script>
+    const feedbackForm = document.getElementById("feedbackForm");
+    const userName = document.getElementById("userName");
+    const userEmail = document.getElementById("userEmail");
+    const formMessage = document.getElementById("formMessage");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const ratingError = document.getElementById("ratingError");
+
+    const namePattern = /^[A-Za-z]+$/;
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    function showMessage(text, type) {
+      formMessage.textContent = text;
+      formMessage.className = type;
+    }
+
+    function setError(input, errorElement, message) {
+      input.classList.add("input-error");
+      input.classList.remove("input-success");
+      errorElement.textContent = message;
+    }
+
+    function setSuccess(input, errorElement) {
+      input.classList.remove("input-error");
+      input.classList.add("input-success");
+      errorElement.textContent = "";
+    }
+
+    function clearInput(input, errorElement) {
+      input.classList.remove("input-error");
+      input.classList.remove("input-success");
+      errorElement.textContent = "";
+    }
+
+    function validateName() {
+      const name = userName.value.trim();
+
+      if (name === "") {
+        setError(userName, nameError, "Full name is required.");
+        return false;
+      }
+
+      if (!namePattern.test(name)) {
+        setError(userName, nameError, "Enter one name only using letters. No spaces, numbers, or symbols.");
+        return false;
+      }
+
+      setSuccess(userName, nameError);
+      return true;
+    }
+
+    function validateEmail() {
+      const email = userEmail.value.trim();
+
+      if (email === "") {
+        setError(userEmail, emailError, "Email address is required.");
+        return false;
+      }
+
+      if (!emailPattern.test(email)) {
+        setError(userEmail, emailError, "Enter a correct email like name@email.com.");
+        return false;
+      }
+
+      setSuccess(userEmail, emailError);
+      return true;
+    }
+
+    function validateRating() {
+      const selectedRating = document.querySelector('input[name="rating"]:checked');
+
+      if (!selectedRating) {
+        ratingError.textContent = "Please select a website rating.";
+        return false;
+      }
+
+      ratingError.textContent = "";
+      return true;
+    }
+
+    userName.addEventListener("input", function() {
+      if (userName.value.trim() === "") {
+        clearInput(userName, nameError);
+      } else {
+        validateName();
+      }
+    });
+
+    userEmail.addEventListener("input", function() {
+      if (userEmail.value.trim() === "") {
+        clearInput(userEmail, emailError);
+      } else {
+        validateEmail();
+      }
+    });
+
+    feedbackForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const isNameValid = validateName();
+      const isEmailValid = validateEmail();
+      const isRatingValid = validateRating();
+
+      if (!isNameValid || !isEmailValid || !isRatingValid) {
+        showMessage("Please fix the highlighted fields before submitting.", "error");
+        return;
+      }
+
+      showMessage("Submitting your feedback...", "loading");
+
+      const formData = new FormData(feedbackForm);
+
+      fetch("../server/process_feedback.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        showMessage("Thank you! Your feedback was submitted successfully.", "success");
+        feedbackForm.reset();
+
+        userName.classList.remove("input-success");
+        userEmail.classList.remove("input-success");
+      })
+      .catch(error => {
+        showMessage("Sorry, something went wrong. Please try again.", "error");
+      });
+    });
+  </script>
 
   <script src="../scripts/main.js"></script>
 </body>

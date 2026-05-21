@@ -277,19 +277,35 @@ and allows users to explore and navigate to booking pages.
   </main>
 
   <div class="modal" id="accountModal" aria-hidden="true">
-    <div class="box">
-      <h3>Account</h3>
-      <div class="row">
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-      </div>
-      <div class="actions">
-        <button class="ghost" id="accountClose" type="button">Close</button>
-        <button class="solid" type="button">Continue</button>
-      </div>
+  <div class="box accountBox">
+    <button class="accountX" id="accountClose" type="button">×</button>
+
+    <h3>Account</h3>
+
+    <div class="hero-actions" style="justify-content:center; margin-bottom:20px;">
+      <button class="btn brand" id="showLogin" type="button">Login</button>
+      <button class="btn" id="showRegister" type="button">Register</button>
+    </div>
+
+    <p id="accountMessage"></p>
+
+    <div class="row">
+      <input type="text" id="accountName" placeholder="Name" style="display:none;" />
+      <small id="nameError" style="color:red;"></small>
+
+      <input type="email" id="accountEmail" placeholder="Email" />
+      <small id="emailError" style="color:red;"></small>
+
+      <input type="password" id="accountPassword" placeholder="Password" />
+      <small id="passwordError" style="color:red;"></small>
+    </div>
+
+    <div class="hero-actions" style="justify-content:center; margin-top:20px;">
+      <button class="btn brand" id="loginBtn" type="button">Login</button>
+      <button class="btn brand" id="registerBtn" type="button" style="display:none;">Register</button>
     </div>
   </div>
-
+</div>
   <script src="./scripts/main.js"></script>
 </body>
 </html>
