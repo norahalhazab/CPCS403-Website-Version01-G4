@@ -217,9 +217,12 @@ document.getElementById("activityBookingForm").addEventListener("submit", functi
   const msg = document.getElementById("activityBookingMessage");
   const formData = new FormData(this);
 
-  fetch("../api/add-booking.php", { method: "POST", body: formData })
-  .then(res => res.text())
-  .then(data => {
+fetch("../api/add-booking.php", {
+  method: "POST",
+  body: formData
+})
+.then(res => res.json())
+.then(data => {
     if (data.success) {
       msg.innerHTML = `<div class="notice">Activity booked successfully! You can view it in your profile.</div>`;
       this.reset();

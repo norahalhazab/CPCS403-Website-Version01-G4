@@ -16,7 +16,7 @@ $slot_time = $_POST["slot_time"] ?? "";
 $participants = intval($_POST["participants"] ?? 1);
 $user_age = intval($_POST["user_age"] ?? 0);
 
-if ($activity_id <= 0  $date === ""  $slot_time === ""  $participants <= 0  $user_age <= 0) {
+if ($activity_id <= 0 || $date === "" || $slot_time === "" || $participants <= 0 || $user_age <= 0) {
     echo json_encode(["success" => false, "message" => "Please complete all fields."]);
     exit;
 }

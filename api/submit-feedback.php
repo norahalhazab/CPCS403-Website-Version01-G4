@@ -11,7 +11,7 @@ $comments = trim($_POST["comments"] ?? "");
 $services = isset($_POST["services"]) ? implode(", ", $_POST["services"]) : "";
 $user_id = $_SESSION["user_id"] ?? null;
 
-if ($name === ""  $email === ""  $rating === "") {
+if ($name === "" || $email === "" || $rating === "") {
     echo json_encode(["success" => false, "message" => "Name, email, and rating are required."]);
     exit;
 }
