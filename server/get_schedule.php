@@ -3,9 +3,10 @@ require_once "../config/db.php";
 
 header("Content-Type: application/json");
 
+// استلام الفلاتر من الرابط
 $date = $_GET["date"] ?? date("Y-m-d");
 $type = $_GET["type"] ?? "all";
-$activity = $_GET["activity"] ?? "all";
+$query = trim($_GET["query"] ?? ""); // استلام النص المكتوب في مربع البحث
 
 $sql = "
 SELECT 
@@ -32,15 +33,17 @@ AND a.is_active = 1
 $params = [$date];
 $types = "s";
 
+// فلترة حسب نوع النشاط
 if ($type !== "all") {
     $sql .= " AND a.category = ?";
     $params[] = $type;
     $types .= "s";
 }
 
-if ($activity !== "all") {
-    $sql .= " AND LOWER(REPLACE(a.activity_name, '-', '')) = ?";
-    $params[] = strtolower(str_replace("-", "", $activity));
+// فلترة حسب النص المكتوب في حقل البحث (البحث بجزء من الاسم)
+if ($query !== "") {
+    $sql .= " AND a.activity_name LIKE ?";
+    $params[] = "%" . $query . "%";
     $types .= "s";
 }
 
