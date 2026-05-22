@@ -61,7 +61,7 @@
   <div class="container">
 
     <div class="panel" style="margin-bottom:40px;">
-      <div class="formgrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;">
+      <div class="formgrid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:15px;">
         <label>
           Date
           <input type="date" id="dateFilter">
@@ -77,8 +77,23 @@
         </label>
 
         <label>
+          Age
+          <select id="ageFilter">
+            <option value="all">All Ages</option>
+            </select>
+        </label>
+
+        <label>
+          Time
+          <select id="timeFilter">
+            <option value="all">All Times</option>
+            </select>
+        </label>
+
+        <label>
           Search Activity
-          <input type="text" id="searchInput" placeholder="Enter activity name...">
+          <input type="text" id="searchInput" list="activityOptions" placeholder="Type or select...">
+          <datalist id="activityOptions"></datalist>
         </label>
       </div>
     </div>
@@ -131,7 +146,10 @@ const noResults = document.getElementById("noResults");
 // Get filter inputs
 const dateFilter = document.getElementById("dateFilter");
 const typeFilter = document.getElementById("typeFilter");
+const ageFilter = document.getElementById("ageFilter");
+const timeFilter = document.getElementById("timeFilter");
 const searchInput = document.getElementById("searchInput");
+const activityOptions = document.getElementById("activityOptions");
 
 // Set today's date as the default value
 dateFilter.value = new Date().toISOString().split("T")[0];
@@ -148,11 +166,40 @@ function activityKey(name){
   return name.toLowerCase().replace("-", "").replace(/\s+/g, "");
 }
 
+// Function to dynamically load times from the database
+function loadTimes() {
+  fetch('../server/get_times.php')
+    .then(res => res.json())
+    .then(data => {
+      timeFilter.innerHTML = '<option value="all">All Times</option>';
+      data.forEach(time => {
+        timeFilter.innerHTML += `<option value="${time}">${time}</option>`;
+      });
+    })
+    .catch(error => console.log("Error loading times:", error));
+}
+
+// Function to dynamically load ages from the database
+function loadAges() {
+  fetch('../server/get_ages.php')
+    .then(res => res.json())
+    .then(data => {
+      ageFilter.innerHTML = '<option value="all">All Ages</option>';
+      data.forEach(age => {
+        // Adding the '+' sign to make it look like '12+'
+        ageFilter.innerHTML += `<option value="${age}">${age}+</option>`;
+      });
+    })
+    .catch(error => console.log("Error loading ages:", error));
+}
+
 // Main function to fetch and display the schedule
 function loadSchedule(){
   // Get current values from all filters
   const date = dateFilter.value;
   const type = typeFilter.value;
+  const age = ageFilter.value;
+  const time = timeFilter.value;
   let query = searchInput.value;
 
   // Show a loading message while fetching data
@@ -162,12 +209,16 @@ function loadSchedule(){
     </tr>
   `;
 
-  // Send AJAX request to the PHP server with filter parameters
-  fetch(`../server/get_schedule.php?date=${date}&type=${type}&query=${query}`)
+  // Send AJAX request to the PHP server with all filter parameters
+  fetch(`../server/get_schedule.php?date=${date}&type=${type}&age=${age}&time=${time}&query=${query}`)
     .then(res => res.json())
     .then(data => {
       // Clear the loading message
       tableBody.innerHTML = "";
+      
+      // Clear the smart dropdown options to update them dynamically
+      activityOptions.innerHTML = "";
+      let uniqueActivities = new Set();
 
       // Check if the database returned any results
       if(!data.length){
@@ -180,6 +231,9 @@ function loadSchedule(){
 
       // Loop through each activity and add it to the table
       data.forEach(item => {
+        // Collect unique activity names for the smart dropdown
+        uniqueActivities.add(item.activity_name);
+
         const row = document.createElement("tr");
 
         const key = activityKey(item.activity_name);
@@ -215,6 +269,11 @@ function loadSchedule(){
 
         tableBody.appendChild(row);
       });
+
+      // Populate the smart dropdown with the updated unique activities
+      uniqueActivities.forEach(activityName => {
+        activityOptions.innerHTML += `<option value="${activityName}">`;
+      });
     })
     .catch(() => {
       // Handle connection errors
@@ -231,11 +290,15 @@ function loadSchedule(){
 // Add event listeners to update the table when dropdowns change
 dateFilter.addEventListener("change", loadSchedule);
 typeFilter.addEventListener("change", loadSchedule);
+ageFilter.addEventListener("change", loadSchedule);
+timeFilter.addEventListener("change", loadSchedule);
 
-// Update the table automatically when the user types in the search box (Live Search)
-searchInput.addEventListener("keyup", loadSchedule);
+// Update the table automatically when the user types or selects from the search box
+searchInput.addEventListener("input", loadSchedule);
 
-// Load the initial schedule when the page first opens
+// Load times, ages, and initial schedule when the page first opens
+loadTimes();
+loadAges();
 loadSchedule();
 </script>
 
