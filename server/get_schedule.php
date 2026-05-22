@@ -3,10 +3,10 @@ require_once "../config/db.php";
 
 header("Content-Type: application/json");
 
-// استلام الفلاتر من الرابط
+// Get filter values from the URL
 $date = $_GET["date"] ?? date("Y-m-d");
 $type = $_GET["type"] ?? "all";
-$query = trim($_GET["query"] ?? ""); // استلام النص المكتوب في مربع البحث
+$query = trim($_GET["query"] ?? ""); // Get the text typed in the search box
 
 $sql = "
 SELECT 
@@ -33,14 +33,14 @@ AND a.is_active = 1
 $params = [$date];
 $types = "s";
 
-// فلترة حسب نوع النشاط
+// Filter by activity category
 if ($type !== "all") {
     $sql .= " AND a.category = ?";
     $params[] = $type;
     $types .= "s";
 }
 
-// فلترة حسب النص المكتوب في حقل البحث (البحث بجزء من الاسم)
+// Filter by activity name (partial match using LIKE)
 if ($query !== "") {
     $sql .= " AND a.activity_name LIKE ?";
     $params[] = "%" . $query . "%";
