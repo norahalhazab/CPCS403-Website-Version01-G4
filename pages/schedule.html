@@ -77,16 +77,8 @@
         </label>
 
         <label>
-          Activity Name
-          <select id="activityFilter">
-            <option value="all">All Activities</option>
-            <option value="dive">Dive</option>
-            <option value="snorkeling">Snorkeling</option>
-            <option value="sailing">Sailing</option>
-            <option value="kayaking">Kayaking</option>
-            <option value="hiking">Hiking</option>
-            <option value="ebiking">E-Biking</option>
-          </select>
+          Search Activity
+          <input type="text" id="searchInput" placeholder="Enter activity name...">
         </label>
       </div>
     </div>
@@ -132,48 +124,61 @@
 </footer>
 
 <script>
+// Get table body and no results message elements
 const tableBody = document.getElementById("scheduleBody");
 const noResults = document.getElementById("noResults");
 
+// Get filter inputs
 const dateFilter = document.getElementById("dateFilter");
 const typeFilter = document.getElementById("typeFilter");
-const activityFilter = document.getElementById("activityFilter");
+const searchInput = document.getElementById("searchInput");
 
+// Set today's date as the default value
 dateFilter.value = new Date().toISOString().split("T")[0];
 
+// Function to check availability status and return the correct CSS class
 function statusClass(status){
   if(status === "Full") return "full";
   if(status === "Limited") return "limited";
   return "available";
 }
 
+// Function to format the activity name for the booking link
 function activityKey(name){
   return name.toLowerCase().replace("-", "").replace(/\s+/g, "");
 }
 
+// Main function to fetch and display the schedule
 function loadSchedule(){
+  // Get current values from all filters
   const date = dateFilter.value;
   const type = typeFilter.value;
-  const activity = activityFilter.value;
+  let query = searchInput.value;
 
+  // Show a loading message while fetching data
   tableBody.innerHTML = `
     <tr>
       <td colspan="7" style="text-align:center;padding:24px;">Loading schedule...</td>
     </tr>
   `;
 
-  fetch(`../server/get_schedule.php?date=${date}&type=${type}&activity=${activity}`)
+  // Send AJAX request to the PHP server with filter parameters
+  fetch(`../server/get_schedule.php?date=${date}&type=${type}&query=${query}`)
     .then(res => res.json())
     .then(data => {
+      // Clear the loading message
       tableBody.innerHTML = "";
 
+      // Check if the database returned any results
       if(!data.length){
         noResults.style.display = "block";
         return;
       }
 
+      // Hide 'no results' message if data exists
       noResults.style.display = "none";
 
+      // Loop through each activity and add it to the table
       data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -212,6 +217,7 @@ function loadSchedule(){
       });
     })
     .catch(() => {
+      // Handle connection errors
       tableBody.innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;color:#991b1b;padding:24px;">
@@ -222,10 +228,14 @@ function loadSchedule(){
     });
 }
 
+// Add event listeners to update the table when dropdowns change
 dateFilter.addEventListener("change", loadSchedule);
 typeFilter.addEventListener("change", loadSchedule);
-activityFilter.addEventListener("change", loadSchedule);
 
+// Update the table automatically when the user types in the search box (Live Search)
+searchInput.addEventListener("keyup", loadSchedule);
+
+// Load the initial schedule when the page first opens
 loadSchedule();
 </script>
 
