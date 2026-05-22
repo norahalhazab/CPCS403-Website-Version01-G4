@@ -6,7 +6,9 @@ header("Content-Type: application/json");
 // Get filter values from the URL
 $date = $_GET["date"] ?? date("Y-m-d");
 $type = $_GET["type"] ?? "all";
-$query = trim($_GET["query"] ?? ""); // Get the text typed in the search box
+$age = $_GET["age"] ?? "all";
+$time = $_GET["time"] ?? "all"; // Get the time filter value
+$query = trim($_GET["query"] ?? ""); 
 
 $sql = "
 SELECT 
@@ -37,6 +39,20 @@ $types = "s";
 if ($type !== "all") {
     $sql .= " AND a.category = ?";
     $params[] = $type;
+    $types .= "s";
+}
+
+// Filter by minimum age
+if ($age !== "all") {
+    $sql .= " AND a.min_age = ?";
+    $params[] = (int)$age;
+    $types .= "i";
+}
+
+// Filter by time slot
+if ($time !== "all") {
+    $sql .= " AND ats.slot_time LIKE ?";
+    $params[] = $time . "%"; // e.g., "09:00%" matches "09:00:00" in the database
     $types .= "s";
 }
 
